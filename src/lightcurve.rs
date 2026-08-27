@@ -33,7 +33,7 @@ pub struct LightCurveSpec {
 
 /// Confirmed-planet LCs (Kepler-10, Kepler-1/2/4–9/11/22, K2-3/18) are
 /// training hosts, not moons. Kepler-1625 / 1708 / 167 are **holdout**
-/// hosts: photometry flags only. Sibling planets (11 c/d, 9 c) reuse the
+/// hosts: photometry flags only. Sibling planets (11 c/d/e, 9 c) reuse the
 /// same host Q1 extract with their own catalog epochs.
 pub fn cached_specs() -> Vec<LightCurveSpec> {
     vec![
@@ -82,6 +82,18 @@ pub fn cached_specs() -> Vec<LightCurveSpec> {
             cache_csv: "lightcurves/kepler11b_kic6541920_q1_llc.csv",
             source_url: "https://archive.stsci.edu/pub/kepler/lightcurves/0065/006541920/kplr006541920-2009166043257_llc.fits",
             note: "Same Q1 LLC as Kepler-11 b (KIC 6541920). Catalog epoch t0≈148.46 BKJD falls in this quarter — not invented. Not a moon.",
+            time_offset_days: 0.0,
+            extract_mid_points: None,
+        },
+        LightCurveSpec {
+            name: "Kepler-11 e",
+            target_id: 6_541_920,
+            id_kind: "KIC",
+            mission: "Kepler",
+            cadence: "long",
+            cache_csv: "lightcurves/kepler11b_kic6541920_q1_llc.csv",
+            source_url: "https://archive.stsci.edu/pub/kepler/lightcurves/0065/006541920/kplr006541920-2009166043257_llc.fits",
+            note: "Same Q1 LLC as Kepler-11 b (KIC 6541920). Catalog epoch t0≈154.16 BKJD falls in this quarter — not invented. Kepler-11 f/g catalog epochs do not fall in Q1; they are not added. Not a moon.",
             time_offset_days: 0.0,
             extract_mid_points: None,
         },

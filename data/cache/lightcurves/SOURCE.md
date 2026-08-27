@@ -42,10 +42,11 @@ Honesty:
 - Kepler-10 b, Kepler-1 b, Kepler-2 b, Kepler-4–8 b, Kepler-9 b/c,
   Kepler-11 b/c/d, Kepler-22 b, K2-3 b, and K2-18 b are **confirmed
   planets**, used as LC-backed training hosts. They are not moon detections.
-  Kepler-22 b Q1 covers the catalog epoch (t0≈133.70 BKJD); Kepler-11 b/c/d
-  cover catalog t0≈138.50 / 138.18 / 148.46; Kepler-9 b/c cover previous
-  catalog epochs (≈163.27 / ≈136.52). Those transits were not invented.
-  Kepler-11 c/d and Kepler-9 c reuse the host-star Q1 extract.
+  Kepler-22 b Q1 covers the catalog epoch (t0≈133.70 BKJD); Kepler-11 b/c/d/e
+  cover catalog t0≈138.50 / 138.18 / 148.46 / 154.16; Kepler-9 b/c cover
+  previous catalog epochs (≈163.27 / ≈136.52). Those transits were not
+  invented. Kepler-11 c/d/e and Kepler-9 c reuse the host-star Q1 extract.
+  Kepler-11 f/g catalog epochs do not fall in Q1; no transit was invented.
 - Kepler-1625 b, Kepler-1708 b, and Kepler-167 e are **holdouts**.
   Q8 (1625; BKJD ≈ 735–802) and Q1 (1708, 167e; BKJD ≈ 131–165) do **not**
   cover a catalog transit (P ≈ 287 / 737 / 1071 d). No transit was invented.
