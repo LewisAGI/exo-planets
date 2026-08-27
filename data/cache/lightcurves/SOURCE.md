@@ -82,6 +82,9 @@ TESS TIME is BTJD (BJD−2457000). Cached TESS times are shifted to BKJD
 | `kepler61b_kic6960913_q1_llc.csv` | Kepler-61 b | KIC 6960913 | Q1 LLC | https://archive.stsci.edu/pub/kepler/lightcurves/0069/006960913/kplr006960913-2009166043257_llc.fits |
 | `kepler66b_kic9836149_q1_llc.csv` | Kepler-66 b | KIC 9836149 | Q1 LLC | https://archive.stsci.edu/pub/kepler/lightcurves/0098/009836149/kplr009836149-2009166043257_llc.fits |
 | `kepler74b_kic6046540_q1_llc.csv` | Kepler-74 b | KIC 6046540 | Q1 LLC | https://archive.stsci.edu/pub/kepler/lightcurves/0060/006046540/kplr006046540-2009166043257_llc.fits |
+| `kepler43b_kic9818381_q1_llc.csv` | Kepler-43 b | KIC 9818381 | Q1 LLC | https://archive.stsci.edu/pub/kepler/lightcurves/0098/009818381/kplr009818381-2009166043257_llc.fits |
+| `kepler44b_kic9305831_q1_llc.csv` | Kepler-44 b | KIC 9305831 | Q1 LLC | https://archive.stsci.edu/pub/kepler/lightcurves/0093/009305831/kplr009305831-2009166043257_llc.fits |
+| `kepler92b_kic6196457_q1_llc.csv` | Kepler-92 b/c/d | KIC 6196457 | Q1 LLC | https://archive.stsci.edu/pub/kepler/lightcurves/0061/006196457/kplr006196457-2009166043257_llc.fits |
 | `k2_3_epic201367065_c01_llc.csv` | K2-3 b | EPIC 201367065 | K2 C1 LLC | https://archive.stsci.edu/pub/k2/lightcurves/c1/201300000/67000/ktwo201367065-c01_llc.fits |
 | `k2_18_epic201912552_c01_llc.csv` | K2-18 b | EPIC 201912552 | K2 C1 LLC | https://archive.stsci.edu/pub/k2/lightcurves/c1/201900000/12000/ktwo201912552-c01_llc.fits |
 | `kepler1625b_kic4760478_q8_llc.csv` | Kepler-1625 b | KIC 4760478 | Q8 LLC | https://archive.stsci.edu/pub/kepler/lightcurves/0047/004760478/kplr004760478-2011073133259_llc.fits |
@@ -96,7 +99,7 @@ Honesty:
 - Kepler-10 b, Kepler-1 b, Kepler-2 b, Kepler-3 b, Kepler-4–8 b, Kepler-9 b/c,
   Kepler-11 b/c/d/e, Kepler-18 b/c/d, Kepler-19 b, Kepler-20 b–f, Kepler-21 b,
   Kepler-23 b/c, Kepler-24 b/c, Kepler-26 b/c/d, Kepler-27 b/c, Kepler-28 b/c,
-  Kepler-41 b, Kepler-52 b/c/d, Kepler-53 b/c, Kepler-54 b/c/d, Kepler-55 b–e,
+  Kepler-41 b, Kepler-43 b, Kepler-44 b, Kepler-52 b/c/d, Kepler-53 b/c, Kepler-54 b/c/d, Kepler-55 b–e,
   Kepler-56 b/c, Kepler-57 b/c,
   Kepler-58 b/c/d, Kepler-59 b/c,
   Kepler-60 b/c/d, Kepler-61 b, Kepler-66 b, Kepler-69 b, Kepler-74 b,
@@ -104,7 +107,7 @@ Honesty:
   Kepler-29 b/c, Kepler-30 b/d, Kepler-31 b/c, Kepler-32 b–f, Kepler-50 b/c,
   Kepler-33 b–f, Kepler-36 b/c, Kepler-37 b/c/d, Kepler-42 b/c/d, Kepler-48 b–d,
   Kepler-51 b, Kepler-62 c/d/e, Kepler-65 b/c/d, Kepler-68 c, Kepler-79 b–e,
-  Kepler-80 c–f, Kepler-81 b/c/d, Kepler-88 b, Kepler-89 b–e, Kepler-93 b,
+  Kepler-80 c–f, Kepler-81 b/c/d, Kepler-88 b, Kepler-89 b–e, Kepler-92 b/c/d, Kepler-93 b,
   Kepler-94 b, Kepler-95 b, Kepler-100 b/c/d,
   Kepler-102 b–f, Kepler-138 b/c/d, Kepler-186 b–e, Kepler-444 b–f, Kepler-22 b,
   K2-3 b/c, and K2-18 b are
@@ -130,7 +133,7 @@ Honesty:
   Kepler-54 c/d reuse Kepler-54 b; Kepler-55 c–e reuse Kepler-55 b;
   Kepler-52 c/d reuse Kepler-52 b; Kepler-53 c reuses Kepler-53 b;
   Kepler-31 c reuses Kepler-31 b; Kepler-50 c reuses Kepler-50 b;
-  Kepler-81 c/d reuse Kepler-81 b.
+  Kepler-81 c/d reuse Kepler-81 b; Kepler-92 c/d reuse Kepler-92 b.
   Kepler-22 b Q1 covers the catalog epoch (t0≈133.70 BKJD); Kepler-11 b/c/d/e
   cover catalog t0≈138.50 / 138.18 / 148.46 / 154.16; Kepler-9 b/c cover
   previous catalog epochs (≈163.27 / ≈136.52); Kepler-37 b/c/d cover
@@ -147,7 +150,7 @@ Honesty:
   catalog epoch (≈156.12); Kepler-31 b covers the previous catalog
   epoch (≈159.16).
   Kepler-42 b, Kepler-32 b/c, Kepler-26 b, Kepler-28 b/c, Kepler-29 b/c,
-  Kepler-50 b, Kepler-52 b, Kepler-55 d, Kepler-81 b/c, and Kepler-186 c use folded catalog transits. Those transits were not
+  Kepler-50 b, Kepler-52 b, Kepler-55 d, Kepler-81 b/c, Kepler-92 b, and Kepler-186 c use folded catalog transits. Those transits were not
   invented. Kepler-11 c/d/e and Kepler-9 c reuse the host-star Q1 extract.
   Kepler-11 f/g catalog epochs do not fall in Q1; no transit was invented.
 - Kepler-1625 b, Kepler-1708 b, and Kepler-167 e are **holdouts**.
