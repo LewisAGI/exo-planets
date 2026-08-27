@@ -31,7 +31,7 @@ pub struct LightCurveSpec {
     pub extract_mid_points: Option<usize>,
 }
 
-/// Confirmed-planet LCs (Kepler-10, Kepler-1/2/4–9/11/22–24/26–33/37/41/42/50/52–60/62/65/69/76/80/81/84/85/88/93–95/100/138/186/444, K2-3/18) are
+/// Confirmed-planet LCs (Kepler-10, Kepler-1/2/4–9/11/22–24/26–33/37/41/42/50/52–62/65/66/69/74/76/80/81/84/85/88/93–95/100/138/186/444, K2-3/18) are
 /// training hosts, not moons. Kepler-1625 / 1708 / 167 are **holdout**
 /// hosts: photometry flags only. Sibling planets reuse the same host extract
 /// with their own catalog epochs.
@@ -1702,6 +1702,42 @@ pub fn cached_specs() -> Vec<LightCurveSpec> {
             cache_csv: "lightcurves/kepler95b_kic8349582_q1_llc.csv",
             source_url: "https://archive.stsci.edu/pub/kepler/lightcurves/0083/008349582/kplr008349582-2009166043257_llc.fits",
             note: "Q1 LLC. Confirmed planet (P≈11.52 d, t0≈131.97 BKJD). Catalog transit falls in this quarter — not invented. Not a moon.",
+            time_offset_days: 0.0,
+            extract_mid_points: None,
+        },
+        LightCurveSpec {
+            name: "Kepler-61 b",
+            target_id: 6_960_913,
+            id_kind: "KIC",
+            mission: "Kepler",
+            cadence: "long",
+            cache_csv: "lightcurves/kepler61b_kic6960913_q1_llc.csv",
+            source_url: "https://archive.stsci.edu/pub/kepler/lightcurves/0069/006960913/kplr006960913-2009166043257_llc.fits",
+            note: "Q1 LLC. Confirmed planet (P≈59.88 d, t0≈151.18 BKJD). Catalog transit falls in this quarter — not invented. Not a moon.",
+            time_offset_days: 0.0,
+            extract_mid_points: None,
+        },
+        LightCurveSpec {
+            name: "Kepler-66 b",
+            target_id: 9_836_149,
+            id_kind: "KIC",
+            mission: "Kepler",
+            cadence: "long",
+            cache_csv: "lightcurves/kepler66b_kic9836149_q1_llc.csv",
+            source_url: "https://archive.stsci.edu/pub/kepler/lightcurves/0098/009836149/kplr009836149-2009166043257_llc.fits",
+            note: "Q1 LLC. Confirmed planet (P≈17.82 d, t0≈134.48 BKJD). Catalog transit falls in this quarter — not invented. Not a moon.",
+            time_offset_days: 0.0,
+            extract_mid_points: None,
+        },
+        LightCurveSpec {
+            name: "Kepler-74 b",
+            target_id: 6_046_540,
+            id_kind: "KIC",
+            mission: "Kepler",
+            cadence: "long",
+            cache_csv: "lightcurves/kepler74b_kic6046540_q1_llc.csv",
+            source_url: "https://archive.stsci.edu/pub/kepler/lightcurves/0060/006046540/kplr006046540-2009166043257_llc.fits",
+            note: "Q1 LLC. Confirmed planet (P≈7.34 d, t0≈134.35 BKJD). Catalog transit falls in this quarter — not invented. Not a moon.",
             time_offset_days: 0.0,
             extract_mid_points: None,
         },
