@@ -31,7 +31,7 @@ results. HEK II–V are **all null**. Named objects stay
    Kepler-37 b/c/d, Kepler-42 b/c/d, Kepler-48 b–d, Kepler-51 b, Kepler-62 c/d/e,
    Kepler-65 b/c/d, Kepler-68 c, Kepler-79 b–e, Kepler-80 c–f, Kepler-81 b/c/d,
    Kepler-88 b,
-   Kepler-89 b–e, Kepler-90 b/c/d/e/h, Kepler-91 b, Kepler-92 b/c/d, Kepler-93 b, Kepler-94 b, Kepler-95 b, Kepler-96 b, Kepler-97 b, Kepler-98 b, Kepler-99 b, Kepler-100 b/c/d, Kepler-101 b/c, Kepler-102 b–f, Kepler-103 b, Kepler-104 b/c, Kepler-105 b/c, Kepler-106 b–e, Kepler-107 b–e, Kepler-108 b, Kepler-109 b, Kepler-110 b, Kepler-111 b, Kepler-112 b, Kepler-113 b, Kepler-114 b/c, Kepler-115 b/c, Kepler-116 b/c, Kepler-117 b/c, Kepler-118 b, Kepler-119 b, Kepler-120 b, Kepler-121 b/c, Kepler-122 b–f, Kepler-123 b, Kepler-124 b/c, Kepler-125 b, Kepler-126 b/c/d, Kepler-127 b/c, Kepler-128 b, Kepler-129 b, Kepler-130 b, Kepler-131 b, Kepler-132 b, Kepler-133 b, Kepler-134 b, Kepler-135 b, Kepler-136 b/c, Kepler-137 b/c, Kepler-139 b/d, Kepler-140 b, Kepler-141 b/c, Kepler-142 b/c/d, Kepler-143 b/c, Kepler-144 b/c, Kepler-145 b/c, Kepler-146 b, Kepler-147 b/c, Kepler-148 b/c, Kepler-149 b, Kepler-150 b–e, Kepler-138 b/c/d,
+   Kepler-89 b–e, Kepler-90 b/c/d/e/h, Kepler-91 b, Kepler-92 b/c/d, Kepler-93 b, Kepler-94 b, Kepler-95 b, Kepler-96 b, Kepler-97 b, Kepler-98 b, Kepler-99 b, Kepler-100 b/c/d, Kepler-101 b/c, Kepler-102 b–f, Kepler-103 b, Kepler-104 b/c, Kepler-105 b/c, Kepler-106 b–e, Kepler-107 b–e, Kepler-108 b, Kepler-109 b, Kepler-110 b, Kepler-111 b, Kepler-112 b, Kepler-113 b, Kepler-114 b/c, Kepler-115 b/c, Kepler-116 b/c, Kepler-117 b/c, Kepler-118 b, Kepler-119 b, Kepler-120 b, Kepler-121 b/c, Kepler-122 b–f, Kepler-123 b, Kepler-124 b/c, Kepler-125 b, Kepler-126 b/c/d, Kepler-127 b/c, Kepler-128 b, Kepler-129 b, Kepler-130 b, Kepler-131 b, Kepler-132 b, Kepler-133 b, Kepler-134 b, Kepler-135 b, Kepler-136 b/c, Kepler-137 b/c, Kepler-139 b/d, Kepler-140 b, Kepler-141 b/c, Kepler-142 b/c/d, Kepler-143 b/c, Kepler-144 b/c, Kepler-145 b/c, Kepler-146 b, Kepler-147 b/c, Kepler-148 b/c, Kepler-149 b, Kepler-150 b–e, Kepler-151 b/c, Kepler-152 b/c, Kepler-153 b/c, Kepler-154 b/d/e/f, Kepler-155 b, Kepler-156 b/c, Kepler-157 b/c/d, Kepler-158 b/c, Kepler-159 b/c, Kepler-160 b/c, Kepler-138 b/c/d,
    Kepler-186 b–e, Kepler-444 b–f, Kepler-22 b Q1,
    K2-3 b/c C1, K2-18 b C1, plus holdout-host Q1/Q8 windows
    for Kepler-1625 b,
@@ -207,12 +207,21 @@ They are never trained as confirmed moons. The classifier’s
   Q1), Kepler-147 b/c Q1 (147 c previous epoch ≈137.92), Kepler-148 b/c Q1
   (148 c folded catalog transits; 148 d misses Q1), Kepler-149 b Q1
   (previous epoch ≈156.24; 149 c/d miss Q1), Kepler-150 b–e Q1 (150 c
-  folded catalog transits; 150 d previous epoch ≈154.23),
+  folded catalog transits; 150 d previous epoch ≈154.23), Kepler-151 b/c Q1
+  (151 b previous epoch ≈161.33), Kepler-152 b/c Q1 (152 b folded catalog
+  transits), Kepler-153 b/c Q1 (153 b previous epoch ≈159.84), Kepler-154
+  b/d/e/f Q1 (154 d previous epoch ≈158.40; 154 c misses Q1), Kepler-155 b
+  Q1 (folded catalog transits; 155 c misses Q1), Kepler-156 b/c Q1 (156 b
+  folded catalog transits; 156 c previous epoch ≈162.02), Kepler-157 b/c/d
+  Q1 (157 c previous epoch ≈158.14), Kepler-158 b/c Q1 (158 b previous
+  epoch ≈158.04; 158 c previous epoch ≈156.93), Kepler-159 b/c Q1 (159 b
+  folded catalog transits; 159 c previous epoch ≈151.02), Kepler-160 b/c
+  Q1 (160 c previous epoch ≈157.78),
   Kepler-138 b/c/d Q1, Kepler-186 b–e Q1, Kepler-444 b–f Q1,
   Kepler-22 b
   Q1 (catalog transit in-window, not invented; Kepler-12 b, 25 b, 30 c,
   51 c/d, 62 b, 62 f, 68 b, 80 b, 82 c, 90 f, 103 c, 104 d, 139 c, 140 c,
-  146 c, 148 d, 149 c/d, and 186 f miss Q1 and were not cached;
+  146 c, 148 d, 149 c/d, 154 c, 155 c, and 186 f miss Q1 and were not cached;
   Kepler-67 b Q1 LLC 404 and was not invented), K2-3 b/c C1
   (no catalog epoch; extra-dip unwindowed), K2-18 b C1, Kepler-1625 b Q8,
   Kepler-1708 b Q1, Kepler-167 e Q1.
