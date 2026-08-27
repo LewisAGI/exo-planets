@@ -26,7 +26,7 @@ results. HEK II–V are **all null**. Named objects stay
    Kepler-56 b/c, Kepler-57 b/c,
    Kepler-58 b/c/d, Kepler-59 b/c,
    Kepler-60 b/c/d, Kepler-69 b, Kepler-76 b, Kepler-84 b–e, Kepler-85 b–e,
-   Kepler-29 b/c, Kepler-32 b–f, Kepler-33 b–f,
+   Kepler-29 b/c, Kepler-31 b/c, Kepler-32 b–f, Kepler-33 b–f, Kepler-50 b/c,
    Kepler-37 b/c/d, Kepler-42 b/c/d, Kepler-48 b–d, Kepler-51 b, Kepler-62 c/d/e,
    Kepler-65 b/c/d, Kepler-68 c, Kepler-79 b–e, Kepler-80 c–f, Kepler-88 b,
    Kepler-89 b–e, Kepler-93 b, Kepler-100 b/c/d, Kepler-102 b–f, Kepler-138 b/c/d,
@@ -147,7 +147,9 @@ They are never trained as confirmed moons. The classifier’s
   Kepler-23 b/c Q1, Kepler-24 b/c Q1, Kepler-26 b/c/d Q1,
   Kepler-27 b/c Q1 (27 b catalog t0 after Q1; previous epochs ≈143.33 / ≈158.67
   in-window), Kepler-28 b/c Q1 (catalog t0 after Q1; folded catalog transits),
-  Kepler-29 b/c Q1, Kepler-32 b–f Q1, Kepler-41 b Q1,
+  Kepler-29 b/c Q1, Kepler-31 b/c Q1 (31 b previous epoch ≈159.16),
+  Kepler-32 b–f Q1, Kepler-41 b Q1, Kepler-50 b/c Q1 (50 b folded catalog
+  transits),
   Kepler-52 b/c/d Q1 (52 b folded catalog transits; 52 c previous epoch
   ≈156.34), Kepler-53 b/c Q1 (53 b previous epoch ≈156.12),
   Kepler-54 b/c/d Q1 (54 b catalog t0 after Q1; previous epoch ≈162.20

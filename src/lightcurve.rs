@@ -31,7 +31,7 @@ pub struct LightCurveSpec {
     pub extract_mid_points: Option<usize>,
 }
 
-/// Confirmed-planet LCs (Kepler-10, Kepler-1/2/4–9/11/22–24/26–29/32/33/37/41/42/52–60/62/65/69/76/80/84/85/88/93/100/138/186/444, K2-3/18) are
+/// Confirmed-planet LCs (Kepler-10, Kepler-1/2/4–9/11/22–24/26–33/37/41/42/50/52–60/62/65/69/76/80/84/85/88/93/100/138/186/444, K2-3/18) are
 /// training hosts, not moons. Kepler-1625 / 1708 / 167 are **holdout**
 /// hosts: photometry flags only. Sibling planets reuse the same host extract
 /// with their own catalog epochs.
@@ -1594,6 +1594,54 @@ pub fn cached_specs() -> Vec<LightCurveSpec> {
             cache_csv: "lightcurves/kepler53b_kic5358241_q1_llc.csv",
             source_url: "https://archive.stsci.edu/pub/kepler/lightcurves/0053/005358241/kplr005358241-2009166043257_llc.fits",
             note: "Same Q1 LLC as Kepler-53 b. Catalog epoch t0≈163.85 BKJD falls in this quarter — not invented. Not a moon.",
+            time_offset_days: 0.0,
+            extract_mid_points: None,
+        },
+        LightCurveSpec {
+            name: "Kepler-31 b",
+            target_id: 9_347_899,
+            id_kind: "KIC",
+            mission: "Kepler",
+            cadence: "long",
+            cache_csv: "lightcurves/kepler31b_kic9347899_q1_llc.csv",
+            source_url: "https://archive.stsci.edu/pub/kepler/lightcurves/0093/009347899/kplr009347899-2009166043257_llc.fits",
+            note: "Q1 LLC. Confirmed planet (P≈20.86 d, catalog t0≈180.02 BKJD). Previous catalog epoch ≈159.16 falls in Q1 — not invented. Not a moon.",
+            time_offset_days: 0.0,
+            extract_mid_points: None,
+        },
+        LightCurveSpec {
+            name: "Kepler-31 c",
+            target_id: 9_347_899,
+            id_kind: "KIC",
+            mission: "Kepler",
+            cadence: "long",
+            cache_csv: "lightcurves/kepler31b_kic9347899_q1_llc.csv",
+            source_url: "https://archive.stsci.edu/pub/kepler/lightcurves/0093/009347899/kplr009347899-2009166043257_llc.fits",
+            note: "Same Q1 LLC as Kepler-31 b. Catalog epoch t0≈141.17 BKJD falls in this quarter — not invented. Not a moon.",
+            time_offset_days: 0.0,
+            extract_mid_points: None,
+        },
+        LightCurveSpec {
+            name: "Kepler-50 b",
+            target_id: 11_807_274,
+            id_kind: "KIC",
+            mission: "Kepler",
+            cadence: "long",
+            cache_csv: "lightcurves/kepler50b_kic11807274_q1_llc.csv",
+            source_url: "https://archive.stsci.edu/pub/kepler/lightcurves/0118/011807274/kplr011807274-2009166043257_llc.fits",
+            note: "Q1 LLC. Confirmed planet (P≈7.81 d, catalog t0≈172.61 BKJD). Folded catalog transits fall in Q1 — not invented. Not a moon.",
+            time_offset_days: 0.0,
+            extract_mid_points: None,
+        },
+        LightCurveSpec {
+            name: "Kepler-50 c",
+            target_id: 11_807_274,
+            id_kind: "KIC",
+            mission: "Kepler",
+            cadence: "long",
+            cache_csv: "lightcurves/kepler50b_kic11807274_q1_llc.csv",
+            source_url: "https://archive.stsci.edu/pub/kepler/lightcurves/0118/011807274/kplr011807274-2009166043257_llc.fits",
+            note: "Same Q1 LLC as Kepler-50 b. Catalog epoch t0≈136.95 BKJD falls in this quarter — not invented. Not a moon.",
             time_offset_days: 0.0,
             extract_mid_points: None,
         },
