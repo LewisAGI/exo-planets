@@ -194,7 +194,7 @@ fn k2_hosts_are_planets_not_moons() {
 #[test]
 fn cached_lc_count_and_tess_extract_size() {
     let lcs = load_lightcurves(Path::new("data/cache")).unwrap();
-    assert_eq!(n_cached_lightcurves(&lcs), 49);
+    assert_eq!(n_cached_lightcurves(&lcs), 55);
     let tess = lcs
         .get("Kepler-10 b")
         .unwrap()
@@ -278,8 +278,14 @@ fn hek_v_kepler22_is_windowed_catalog_transit() {
         "Kepler-68 c",
         "Kepler-89 b",
         "Kepler-89 c",
+        "Kepler-89 d",
         "Kepler-102 b",
         "Kepler-102 c",
+        "Kepler-102 d",
+        "Kepler-102 e",
+        "Kepler-102 f",
+        "Kepler-62 c",
+        "Kepler-62 d",
     ] {
         let row = demo
             .per_lc
