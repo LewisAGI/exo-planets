@@ -20,6 +20,9 @@ pub const Q_KOI_LONG_PERIOD: &str = "SELECT TOP 25 kepoi_name,kepid,kepler_name,
 
 pub const Q_KOI_NAMED: &str = "SELECT kepoi_name,kepid,kepler_name,koi_disposition,koi_pdisposition,koi_score,koi_period,koi_time0bk,koi_impact,koi_duration,koi_depth,koi_prad,koi_sma,koi_incl,koi_steff,koi_slogg,koi_srad,koi_smass FROM cumulative WHERE kepler_name IN ('Kepler-1625 b','Kepler-1708 b','Kepler-90 g','Kepler-167 e','Kepler-22 b','Kepler-10 b')";
 
+/// Confirmed LC-backed planets (epochs from KOI, not invented).
+pub const Q_KOI_LC_HOSTS: &str = "SELECT kepoi_name,kepid,kepler_name,koi_disposition,koi_pdisposition,koi_score,koi_period,koi_time0bk,koi_impact,koi_duration,koi_depth,koi_prad,koi_sma,koi_incl,koi_steff,koi_slogg,koi_srad,koi_smass FROM cumulative WHERE kepler_name IN ('Kepler-11 b','Kepler-9 b','Kepler-2 b','Kepler-8 b')";
+
 pub const Q_PS_KEPLER_SAMPLE: &str = "SELECT TOP 80 pl_name,hostname,pl_letter,sy_pnum,discoverymethod,disc_year,disc_facility,pl_orbper,pl_orbsmax,pl_rade,pl_radj,pl_bmasse,pl_bmassj,pl_orbeccen,pl_orbincl,pl_imppar,pl_trandep,pl_trandur,st_teff,st_rad,st_mass,default_flag,tran_flag FROM ps WHERE default_flag=1 AND tran_flag=1 AND disc_facility LIKE '%Kepler%' AND pl_orbper IS NOT NULL AND pl_rade IS NOT NULL AND st_rad IS NOT NULL AND st_mass IS NOT NULL ORDER BY pl_orbper";
 
 pub const Q_PS_NAMED: &str = "SELECT pl_name,hostname,pl_letter,sy_pnum,discoverymethod,disc_year,disc_facility,pl_orbper,pl_orbsmax,pl_rade,pl_radj,pl_bmasse,pl_bmassj,pl_bmasselim,pl_orbeccen,pl_orbincl,pl_imppar,pl_trandep,pl_trandur,st_teff,st_rad,st_mass,default_flag,tran_flag FROM ps WHERE default_flag=1 AND pl_name IN ('Kepler-1625 b','Kepler-1708 b','Kepler-90 g','Kepler-167 e','Kepler-22 b','Kepler-10 b','Kepler-11 b','Kepler-16 b','Kepler-51 d','Kepler-79 d','Kepler-9 b','Kepler-9 c')";
@@ -201,6 +204,7 @@ pub fn load_cache(cache_dir: &Path) -> Result<Vec<CatalogPlanet>> {
         "nasa_koi_confirmed_geometry_sample.csv",
         "nasa_koi_long_period_sample.csv",
         "nasa_koi_named_systems.csv",
+        "nasa_koi_lc_hosts.csv",
     ] {
         let path = cache_dir.join(fname);
         if !path.exists() {
@@ -295,6 +299,10 @@ pub fn fetch_specs() -> Vec<FetchSpec> {
         FetchSpec {
             filename: "nasa_koi_named_systems.csv",
             query: Q_KOI_NAMED,
+        },
+        FetchSpec {
+            filename: "nasa_koi_lc_hosts.csv",
+            query: Q_KOI_LC_HOSTS,
         },
         FetchSpec {
             filename: "nasa_ps_kepler_transiting_sample.csv",

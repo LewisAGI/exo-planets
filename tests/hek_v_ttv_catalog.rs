@@ -95,8 +95,8 @@ fn hek_v_demo_is_a_caution_not_a_detection() {
     let lcs = load_lightcurves(Path::new("data/cache")).unwrap();
     let demo = hek_v_photometry_only_caution(&planets, &lcs);
     assert!(
-        demo.n_planet_only_lightcurves >= 4,
-        "Kepler-10 Kepler+TESS, Kepler-1, Kepler-22, K2-3"
+        demo.n_planet_only_lightcurves >= 8,
+        "Kepler-10 Kepler+TESS, Kepler-1/2/8/9/11/22, K2-3"
     );
     assert!(!demo.per_lc.iter().any(|r| {
         r.planet_name == "Kepler-1625 b"
@@ -133,10 +133,10 @@ fn hek_v_demo_is_a_caution_not_a_detection() {
         .find(|r| r.planet_name == "Kepler-11 b")
         .unwrap();
     assert!(
-        !k11.windowed,
-        "named-PS Kepler-11 b has no KOI epoch; do not invent one"
+        k11.windowed,
+        "KOI lc-host epoch t0≈138.50 is catalog, not invented"
     );
-    assert_eq!(k11.n_in_transit, 0);
+    assert!(k11.n_in_transit > 0);
     assert!(!demo.per_lc.iter().any(|r| r.planet_name == "Kepler-90 g"));
     let k2 = demo
         .per_lc
@@ -167,7 +167,7 @@ fn k2_hosts_are_planets_not_moons() {
 #[test]
 fn cached_lc_count_and_tess_extract_size() {
     let lcs = load_lightcurves(Path::new("data/cache")).unwrap();
-    assert_eq!(n_cached_lightcurves(&lcs), 10);
+    assert_eq!(n_cached_lightcurves(&lcs), 13);
     let tess = lcs
         .get("Kepler-10 b")
         .unwrap()
@@ -214,6 +214,15 @@ fn hek_v_kepler22_is_windowed_catalog_transit() {
         .expect("Kepler-22 b in HEK V demo");
     assert!(k22.windowed);
     assert!(k22.n_in_transit > 0);
+    for name in ["Kepler-2 b", "Kepler-8 b", "Kepler-9 b"] {
+        let row = demo
+            .per_lc
+            .iter()
+            .find(|r| r.planet_name == name)
+            .unwrap_or_else(|| panic!("{name} in HEK V demo"));
+        assert!(row.windowed, "{name} uses catalog KOI epoch");
+        assert!(row.n_in_transit > 0, "{name} Q1 covers a catalog transit");
+    }
     // Cache fraction is not the published 1/4.
     assert!((demo.fraction_on_this_cache - HEK_V_PHOTOMETRY_ONLY_FALSE_FRACTION).abs() > 1e-6);
 }

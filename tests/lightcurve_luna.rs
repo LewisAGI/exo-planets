@@ -27,12 +27,15 @@ fn cached_lcs_are_real_pdcsap_kepler_k2_tess() {
     let dir = Path::new("data/cache");
     let lcs = load_lightcurves(dir).unwrap();
     assert!(
-        n_cached_lightcurves(&lcs) >= 10,
-        "expected Kepler-10 (2), Kepler-1, Kepler-11, Kepler-22, 1625, 1708, 167, K2-3, K2-18"
+        n_cached_lightcurves(&lcs) >= 13,
+        "expected Kepler-10 (2), Kepler-1/2/8/9/11/22, 1625, 1708, 167, K2-3, K2-18"
     );
     for name in [
         "Kepler-10 b",
         "Kepler-1 b",
+        "Kepler-2 b",
+        "Kepler-8 b",
+        "Kepler-9 b",
         "Kepler-11 b",
         "Kepler-22 b",
         "Kepler-1625 b",
@@ -126,16 +129,44 @@ fn extra_dip_flag_is_not_a_moon_and_hek_v_fraction_locked() {
 
     let k11 = planets.iter().find(|p| p.name == "Kepler-11 b").unwrap();
     assert!(
-        k11.epoch_bkjd.is_none(),
-        "named-PS Kepler-11 b has no KOI epoch in this cache"
+        k11.epoch_bkjd.is_some(),
+        "KOI lc-host pull supplies Kepler-11 b t0≈138.50"
     );
     let p11 = photometry_flags(k11, &geometry_for(k11), slice(&lcs, "Kepler-11 b"));
     assert!(p11.lc_available);
-    assert_eq!(
-        p11.n_in_transit, 0,
-        "no catalog epoch; do not invent a Kepler-11 b transit window"
+    assert!(
+        p11.n_in_transit > 0,
+        "Kepler-11 b catalog epoch t0≈138.50 falls in Q1; transit is catalog, not invented"
     );
-    assert!(p11.notes.contains("unwindowed"));
+
+    let k2b = planets.iter().find(|p| p.name == "Kepler-2 b").unwrap();
+    let p2b = photometry_flags(k2b, &geometry_for(k2b), slice(&lcs, "Kepler-2 b"));
+    assert!(p2b.lc_available);
+    assert!(
+        p2b.n_in_transit > 0,
+        "Kepler-2 b catalog ephemeris (P≈2.20 d) has transits in Q1; not invented"
+    );
+
+    let k8 = planets.iter().find(|p| p.name == "Kepler-8 b").unwrap();
+    let p8 = photometry_flags(k8, &geometry_for(k8), slice(&lcs, "Kepler-8 b"));
+    assert!(p8.lc_available);
+    assert!(
+        p8.n_in_transit > 0,
+        "Kepler-8 b catalog ephemeris (P≈3.52 d) has transits in Q1; not invented"
+    );
+
+    let k9 = planets.iter().find(|p| p.name == "Kepler-9 b").unwrap();
+    let t0 = k9.epoch_bkjd.expect("Kepler-9 b KOI epoch");
+    assert!(
+        (t0 - 182.5436).abs() < 1e-3,
+        "catalog t0, not an invented Q1 epoch"
+    );
+    let p9 = photometry_flags(k9, &geometry_for(k9), slice(&lcs, "Kepler-9 b"));
+    assert!(p9.lc_available);
+    assert!(
+        p9.n_in_transit > 0,
+        "previous catalog epoch ≈163.27 falls in Q1; not invented"
+    );
 }
 
 #[test]
