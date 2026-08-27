@@ -21,7 +21,7 @@ Same queries are hardcoded in `src/ingest.rs`. Holczer refresh is CDS HTTP
 | `nasa_koi_confirmed_geometry_sample.csv` | `cumulative` | TOP 60 confirmed KOIs with period, impact, duration, depth, SMA, R*, M* |
 | `nasa_koi_long_period_sample.csv` | `cumulative` | TOP 25 confirmed KOIs with P > 100 d and the same geometry columns |
 | `nasa_koi_named_systems.csv` | `cumulative` | Kepler-1625 b, Kepler-167 e, Kepler-90 g, Kepler-10 b, Kepler-22 b. **Kepler-1708 b is not in this cumulative pull** (no `kepler_name` match; KIC hunt did not return a 737 d KOI). |
-| `nasa_koi_lc_hosts.csv` | `cumulative` | Kepler-2/3/4–9/11/18–21/23/24/26–30/32/33/36/37/42/48/51/62/65/68/79/80/88/89/93/100/102/138/186/444 (letters as listed) KOI epochs for cached Q1 LCs; not invented. Misses Q1: 11 f/g, 12 b, 25 b, 30 c, 51 c/d, 62 b, 62 f, 68 b, 80 b, 186 f. |
+| `nasa_koi_lc_hosts.csv` | `cumulative` | Kepler-2/3/4–9/11/18–21/23/24/26–30/32/33/36/37/41/42/48/51/56/57/62/65/68/69/76/79/80/88/89/93/100/102/138/186/444 (letters as listed) KOI epochs for cached Q1 LCs; not invented. Misses Q1: 11 f/g, 12 b, 25 b, 30 c, 51 c/d, 62 b, 62 f, 68 b, 80 b, 186 f. |
 | `nasa_ps_kepler_transiting_sample.csv` | `ps` | TOP 80 Kepler transiting default rows (masses often empty) |
 | `nasa_ps_named_systems.csv` | `ps` | Named systems including Kepler-1625 b, Kepler-1708 b, Kepler-167 e. Kepler-1708 b `pl_bmasselim=1` (upper limit 4.6 M_J). **Kepler-90 g has no `default_flag=1` PS row** — host parameters come from the KOI cumulative row. |
 | `nasa_ps_k2_hosts.csv` | `ps` | K2-3 b/c and K2-18 b/c default rows (confirmed planets for the K2 C1 LCs). No `pl_tranmid` in this slice — extra-dip is unwindowed. K2-18 c is RV-only (`tran_flag=0`). |

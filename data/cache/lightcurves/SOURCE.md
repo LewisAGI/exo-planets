@@ -60,6 +60,11 @@ TESS TIME is BTJD (BJD−2457000). Cached TESS times are shifted to BKJD
 | `kepler24b_kic3231341_q1_llc.csv` | Kepler-24 b/c | KIC 3231341 | Q1 LLC | https://archive.stsci.edu/pub/kepler/lightcurves/0032/003231341/kplr003231341-2009166043257_llc.fits |
 | `kepler27b_kic5792202_q1_llc.csv` | Kepler-27 b/c | KIC 5792202 | Q1 LLC | https://archive.stsci.edu/pub/kepler/lightcurves/0057/005792202/kplr005792202-2009166043257_llc.fits |
 | `kepler28b_kic6949607_q1_llc.csv` | Kepler-28 b/c | KIC 6949607 | Q1 LLC | https://archive.stsci.edu/pub/kepler/lightcurves/0069/006949607/kplr006949607-2009166043257_llc.fits |
+| `kepler41b_kic9410930_q1_llc.csv` | Kepler-41 b | KIC 9410930 | Q1 LLC | https://archive.stsci.edu/pub/kepler/lightcurves/0094/009410930/kplr009410930-2009166043257_llc.fits |
+| `kepler56b_kic6448890_q1_llc.csv` | Kepler-56 b/c | KIC 6448890 | Q1 LLC | https://archive.stsci.edu/pub/kepler/lightcurves/0064/006448890/kplr006448890-2009166043257_llc.fits |
+| `kepler57b_kic8564587_q1_llc.csv` | Kepler-57 b/c | KIC 8564587 | Q1 LLC | https://archive.stsci.edu/pub/kepler/lightcurves/0085/008564587/kplr008564587-2009166043257_llc.fits |
+| `kepler69b_kic8692861_q1_llc.csv` | Kepler-69 b | KIC 8692861 | Q1 LLC | https://archive.stsci.edu/pub/kepler/lightcurves/0086/008692861/kplr008692861-2009166043257_llc.fits |
+| `kepler76b_kic4570949_q1_llc.csv` | Kepler-76 b | KIC 4570949 | Q1 LLC | https://archive.stsci.edu/pub/kepler/lightcurves/0045/004570949/kplr004570949-2009166043257_llc.fits |
 | `k2_3_epic201367065_c01_llc.csv` | K2-3 b | EPIC 201367065 | K2 C1 LLC | https://archive.stsci.edu/pub/k2/lightcurves/c1/201300000/67000/ktwo201367065-c01_llc.fits |
 | `k2_18_epic201912552_c01_llc.csv` | K2-18 b | EPIC 201912552 | K2 C1 LLC | https://archive.stsci.edu/pub/k2/lightcurves/c1/201900000/12000/ktwo201912552-c01_llc.fits |
 | `kepler1625b_kic4760478_q8_llc.csv` | Kepler-1625 b | KIC 4760478 | Q8 LLC | https://archive.stsci.edu/pub/kepler/lightcurves/0047/004760478/kplr004760478-2011073133259_llc.fits |
@@ -74,6 +79,7 @@ Honesty:
 - Kepler-10 b, Kepler-1 b, Kepler-2 b, Kepler-3 b, Kepler-4–8 b, Kepler-9 b/c,
   Kepler-11 b/c/d/e, Kepler-18 b/c/d, Kepler-19 b, Kepler-20 b–f, Kepler-21 b,
   Kepler-23 b/c, Kepler-24 b/c, Kepler-26 b/c/d, Kepler-27 b/c, Kepler-28 b/c,
+  Kepler-41 b, Kepler-56 b/c, Kepler-57 b/c, Kepler-69 b, Kepler-76 b,
   Kepler-29 b/c, Kepler-30 b/d, Kepler-32 b–f,
   Kepler-33 b–f, Kepler-36 b/c, Kepler-37 b/c/d, Kepler-42 b/c/d, Kepler-48 b–d,
   Kepler-51 b, Kepler-62 c/d/e, Kepler-65 b/c/d, Kepler-68 c, Kepler-79 b–e,
@@ -94,7 +100,8 @@ Honesty:
   Kepler-80 c/e/f reuse Kepler-80 d; Kepler-29 c reuses Kepler-29 b;
   Kepler-100 c/d reuse Kepler-100 b; Kepler-23 c reuses Kepler-23 b;
   Kepler-24 c reuses Kepler-24 b; Kepler-27 c reuses Kepler-27 b;
-  Kepler-28 c reuses Kepler-28 b.
+  Kepler-28 c reuses Kepler-28 b; Kepler-56 c reuses Kepler-56 b;
+  Kepler-57 c reuses Kepler-57 b.
   Kepler-22 b Q1 covers the catalog epoch (t0≈133.70 BKJD); Kepler-11 b/c/d/e
   cover catalog t0≈138.50 / 138.18 / 148.46 / 154.16; Kepler-9 b/c cover
   previous catalog epochs (≈163.27 / ≈136.52); Kepler-37 b/c/d cover
