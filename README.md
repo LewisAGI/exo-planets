@@ -21,7 +21,8 @@ results. HEK II–V are **all null**. Named objects stay
    Kepler-10 b (Kepler Q1 + TESS S14), Kepler-1 b, Kepler-2 b, Kepler-3 b,
    Kepler-4–8 b Q1, Kepler-9 b/c Q1, Kepler-11 b/c/d/e Q1, Kepler-18 b/c/d,
    Kepler-19 b, Kepler-20 b–f, Kepler-21 b, Kepler-30 b/d, Kepler-36 b/c,
-   Kepler-48 b–d, Kepler-51 b, Kepler-79 b–d, Kepler-22 b Q1,
+   Kepler-48 b–d, Kepler-51 b, Kepler-68 c, Kepler-79 b–d, Kepler-89 b/c,
+   Kepler-102 b/c, Kepler-22 b Q1,
    K2-3 b/c C1, K2-18 b C1, plus holdout-host Q1/Q8 windows
    for Kepler-1625 b,
    Kepler-1708 b, and Kepler-167 e. See
@@ -135,9 +136,10 @@ They are never trained as confirmed moons. The classifier’s
   11 f/g epochs are outside Q1 and were not invented),
   Kepler-18 b/c/d Q1, Kepler-19 b Q1, Kepler-20 b–f Q1, Kepler-21 b Q1
   (folded catalog ephemeris), Kepler-30 b/d Q1, Kepler-36 b/c Q1,
-  Kepler-48 b–d Q1, Kepler-51 b Q1, Kepler-79 b–d Q1, Kepler-22 b
+  Kepler-48 b–d Q1, Kepler-51 b Q1, Kepler-68 c Q1, Kepler-79 b–d Q1,
+  Kepler-89 b/c Q1, Kepler-102 b/c Q1, Kepler-22 b
   Q1 (catalog transit in-window, not invented; Kepler-12 b, 25 b, 30 c,
-  51 c/d, 62 b, and 80 b miss Q1 and were not cached), K2-3 b/c C1
+  51 c/d, 62 b, 68 b, and 80 b miss Q1 and were not cached), K2-3 b/c C1
   (no catalog epoch; extra-dip unwindowed), K2-18 b C1, Kepler-1625 b Q8,
   Kepler-1708 b Q1, Kepler-167 e Q1.
   JWST GO 6491 is **MAST/DOI metadata only** (SEARCH; no NIRSpec time
