@@ -27,7 +27,7 @@ fn cached_lcs_are_real_pdcsap_kepler_k2_tess() {
     let dir = Path::new("data/cache");
     let lcs = load_lightcurves(dir).unwrap();
     assert!(
-        n_cached_lightcurves(&lcs) >= 118,
+        n_cached_lightcurves(&lcs) >= 126,
         "expected Kepler-10 (2), Kepler-1/2/4–9/11/22 + siblings, 1625, 1708, 167, K2-3, K2-18"
     );
     for name in [
@@ -141,6 +141,14 @@ fn cached_lcs_are_real_pdcsap_kepler_k2_tess() {
         "Kepler-57 c",
         "Kepler-69 b",
         "Kepler-76 b",
+        "Kepler-58 b",
+        "Kepler-58 c",
+        "Kepler-58 d",
+        "Kepler-59 b",
+        "Kepler-59 c",
+        "Kepler-60 b",
+        "Kepler-60 c",
+        "Kepler-60 d",
         "Kepler-22 b",
         "Kepler-1625 b",
         "Kepler-1708 b",
@@ -378,6 +386,14 @@ fn extra_dip_flag_is_not_a_moon_and_hek_v_fraction_locked() {
         "Kepler-57 c",
         "Kepler-69 b",
         "Kepler-76 b",
+        "Kepler-58 b",
+        "Kepler-58 c",
+        "Kepler-58 d",
+        "Kepler-59 b",
+        "Kepler-59 c",
+        "Kepler-60 b",
+        "Kepler-60 c",
+        "Kepler-60 d",
     ] {
         let p = planets.iter().find(|pl| pl.name == name).unwrap();
         assert!(p.epoch_bkjd.is_some(), "{name} catalog epoch");
