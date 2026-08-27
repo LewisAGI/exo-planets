@@ -21,10 +21,11 @@ results. HEK II–V are **all null**. Named objects stay
    Kepler-10 b (Kepler Q1 + TESS S14), Kepler-1 b, Kepler-2 b, Kepler-3 b,
    Kepler-4–8 b Q1, Kepler-9 b/c Q1, Kepler-11 b/c/d/e Q1, Kepler-18 b/c/d,
    Kepler-19 b, Kepler-20 b–f, Kepler-21 b, Kepler-30 b/d, Kepler-36 b/c,
-   Kepler-26 b/c/d, Kepler-29 b/c, Kepler-32 b–f, Kepler-33 b–f, Kepler-37 b/c/d,
-   Kepler-42 b/c/d, Kepler-48 b–d, Kepler-51 b, Kepler-62 c/d/e, Kepler-65 b/c/d,
-   Kepler-68 c, Kepler-79 b–e, Kepler-80 c–f, Kepler-89 b–e, Kepler-93 b,
-   Kepler-102 b–f, Kepler-138 b/c/d, Kepler-186 b–e, Kepler-444 b–f, Kepler-22 b Q1,
+   Kepler-23 b/c, Kepler-26 b/c/d, Kepler-29 b/c, Kepler-32 b–f, Kepler-33 b–f,
+   Kepler-37 b/c/d, Kepler-42 b/c/d, Kepler-48 b–d, Kepler-51 b, Kepler-62 c/d/e,
+   Kepler-65 b/c/d, Kepler-68 c, Kepler-79 b–e, Kepler-80 c–f, Kepler-88 b,
+   Kepler-89 b–e, Kepler-93 b, Kepler-100 b/c/d, Kepler-102 b–f, Kepler-138 b/c/d,
+   Kepler-186 b–e, Kepler-444 b–f, Kepler-22 b Q1,
    K2-3 b/c C1, K2-18 b C1, plus holdout-host Q1/Q8 windows
    for Kepler-1625 b,
    Kepler-1708 b, and Kepler-167 e. See
@@ -138,10 +139,11 @@ They are never trained as confirmed moons. The classifier’s
   11 f/g epochs are outside Q1 and were not invented),
   Kepler-18 b/c/d Q1, Kepler-19 b Q1, Kepler-20 b–f Q1, Kepler-21 b Q1
   (folded catalog ephemeris), Kepler-30 b/d Q1, Kepler-36 b/c Q1,
-  Kepler-26 b/c/d Q1, Kepler-29 b/c Q1, Kepler-32 b–f Q1, Kepler-33 b–f Q1,
-  Kepler-37 b/c/d Q1, Kepler-42 b/c/d Q1, Kepler-48 b–d Q1, Kepler-51 b Q1,
-  Kepler-62 c/d/e Q1, Kepler-65 b/c/d Q1, Kepler-68 c Q1, Kepler-79 b–e Q1,
-  Kepler-80 c–f Q1, Kepler-89 b–e Q1, Kepler-93 b Q1, Kepler-102 b–f Q1,
+  Kepler-23 b/c Q1, Kepler-26 b/c/d Q1, Kepler-29 b/c Q1, Kepler-32 b–f Q1,
+  Kepler-33 b–f Q1, Kepler-37 b/c/d Q1, Kepler-42 b/c/d Q1, Kepler-48 b–d Q1,
+  Kepler-51 b Q1, Kepler-62 c/d/e Q1, Kepler-65 b/c/d Q1, Kepler-68 c Q1,
+  Kepler-79 b–e Q1, Kepler-80 c–f Q1, Kepler-88 b Q1, Kepler-89 b–e Q1,
+  Kepler-93 b Q1, Kepler-100 b/c/d Q1, Kepler-102 b–f Q1,
   Kepler-138 b/c/d Q1, Kepler-186 b–e Q1, Kepler-444 b–f Q1,
   Kepler-22 b
   Q1 (catalog transit in-window, not invented; Kepler-12 b, 25 b, 30 c,
