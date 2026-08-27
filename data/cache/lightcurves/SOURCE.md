@@ -131,6 +131,16 @@ TESS TIME is BTJD (BJD−2457000). Cached TESS times are shifted to BKJD
 | `kepler124b_kic11288051_q1_llc.csv` | Kepler-124 b/c | KIC 11288051 | Q1 LLC | https://archive.stsci.edu/pub/kepler/lightcurves/0112/011288051/kplr011288051-2009166043257_llc.fits |
 | `kepler125b_kic10489206_q1_llc.csv` | Kepler-125 b | KIC 10489206 | Q1 LLC | https://archive.stsci.edu/pub/kepler/lightcurves/0104/010489206/kplr010489206-2009166043257_llc.fits |
 | `kepler126b_kic8292840_q1_llc.csv` | Kepler-126 b/c/d | KIC 8292840 | Q1 LLC | https://archive.stsci.edu/pub/kepler/lightcurves/0082/008292840/kplr008292840-2009166043257_llc.fits |
+| `kepler127b_kic9451706_q1_llc.csv` | Kepler-127 b/c | KIC 9451706 | Q1 LLC | https://archive.stsci.edu/pub/kepler/lightcurves/0094/009451706/kplr009451706-2009166043257_llc.fits |
+| `kepler128b_kic8077137_q1_llc.csv` | Kepler-128 b | KIC 8077137 | Q1 LLC | https://archive.stsci.edu/pub/kepler/lightcurves/0080/008077137/kplr008077137-2009166043257_llc.fits |
+| `kepler129b_kic10586004_q1_llc.csv` | Kepler-129 b | KIC 10586004 | Q1 LLC | https://archive.stsci.edu/pub/kepler/lightcurves/0105/010586004/kplr010586004-2009166043257_llc.fits |
+| `kepler130b_kic5088536_q1_llc.csv` | Kepler-130 b | KIC 5088536 | Q1 LLC | https://archive.stsci.edu/pub/kepler/lightcurves/0050/005088536/kplr005088536-2009166043257_llc.fits |
+| `kepler131b_kic5695396_q1_llc.csv` | Kepler-131 b | KIC 5695396 | Q1 LLC | https://archive.stsci.edu/pub/kepler/lightcurves/0056/005695396/kplr005695396-2009166043257_llc.fits |
+| `kepler132b_kic6021275_q1_llc.csv` | Kepler-132 b | KIC 6021275 | Q1 LLC | https://archive.stsci.edu/pub/kepler/lightcurves/0060/006021275/kplr006021275-2009166043257_llc.fits |
+| `kepler133b_kic10933561_q1_llc.csv` | Kepler-133 b | KIC 10933561 | Q1 LLC | https://archive.stsci.edu/pub/kepler/lightcurves/0109/010933561/kplr010933561-2009166043257_llc.fits |
+| `kepler134b_kic11547513_q1_llc.csv` | Kepler-134 b | KIC 11547513 | Q1 LLC | https://archive.stsci.edu/pub/kepler/lightcurves/0115/011547513/kplr011547513-2009166043257_llc.fits |
+| `kepler135b_kic3642289_q1_llc.csv` | Kepler-135 b | KIC 3642289 | Q1 LLC | https://archive.stsci.edu/pub/kepler/lightcurves/0036/003642289/kplr003642289-2009166043257_llc.fits |
+| `kepler136b_kic7050989_q1_llc.csv` | Kepler-136 b/c | KIC 7050989 | Q1 LLC | https://archive.stsci.edu/pub/kepler/lightcurves/0070/007050989/kplr007050989-2009166043257_llc.fits |
 | `k2_3_epic201367065_c01_llc.csv` | K2-3 b | EPIC 201367065 | K2 C1 LLC | https://archive.stsci.edu/pub/k2/lightcurves/c1/201300000/67000/ktwo201367065-c01_llc.fits |
 | `k2_18_epic201912552_c01_llc.csv` | K2-18 b | EPIC 201912552 | K2 C1 LLC | https://archive.stsci.edu/pub/k2/lightcurves/c1/201900000/12000/ktwo201912552-c01_llc.fits |
 | `kepler1625b_kic4760478_q8_llc.csv` | Kepler-1625 b | KIC 4760478 | Q8 LLC | https://archive.stsci.edu/pub/kepler/lightcurves/0047/004760478/kplr004760478-2011073133259_llc.fits |
@@ -162,7 +172,9 @@ Honesty:
   Kepler-110 b, Kepler-111 b, Kepler-112 b, Kepler-113 b, Kepler-114 b/c,
   Kepler-115 b/c, Kepler-116 b/c, Kepler-117 b/c, Kepler-90 b/c/d/e/h,
   Kepler-118 b, Kepler-119 b, Kepler-120 b, Kepler-121 b/c, Kepler-122 b–f,
-  Kepler-123 b, Kepler-124 b/c, Kepler-125 b, Kepler-126 b/c/d,
+  Kepler-123 b, Kepler-124 b/c, Kepler-125 b, Kepler-126 b/c/d, Kepler-127 b/c,
+  Kepler-128 b, Kepler-129 b, Kepler-130 b, Kepler-131 b, Kepler-132 b,
+  Kepler-133 b, Kepler-134 b, Kepler-135 b, Kepler-136 b/c,
   Kepler-102 b–f, Kepler-138 b/c/d, Kepler-186 b–e, Kepler-444 b–f, Kepler-22 b,
   K2-3 b/c, and K2-18 b are
   **confirmed planets**, used as LC-backed training hosts. They are not
@@ -197,7 +209,8 @@ Honesty:
   Kepler-116 c reuses Kepler-116 b; Kepler-117 c reuses Kepler-117 b;
   Kepler-90 c/d/e/h reuse Kepler-90 b; Kepler-121 c reuses Kepler-121 b;
   Kepler-122 c–f reuse Kepler-122 b; Kepler-124 c reuses Kepler-124 b;
-  Kepler-126 c/d reuse Kepler-126 b.
+  Kepler-126 c/d reuse Kepler-126 b; Kepler-127 c reuses Kepler-127 b;
+  Kepler-136 c reuses Kepler-136 b.
   Kepler-22 b Q1 covers the catalog epoch (t0≈133.70 BKJD); Kepler-11 b/c/d/e
   cover catalog t0≈138.50 / 138.18 / 148.46 / 154.16; Kepler-9 b/c cover
   previous catalog epochs (≈163.27 / ≈136.52); Kepler-37 b/c/d cover
@@ -216,11 +229,16 @@ Honesty:
   Kepler-46 b covers the previous catalog epoch (≈153.08); Kepler-96 b
   covers the previous catalog epoch (≈154.78); Kepler-113 b covers the
   next catalog epoch (≈133.30); Kepler-126 b covers the previous catalog
-  epoch (≈162.30); Kepler-126 d covers the previous catalog epoch (≈144.76).
+  epoch (≈162.30); Kepler-126 d covers the previous catalog epoch (≈144.76);
+  Kepler-128 b covers the previous catalog epoch (≈160.86); Kepler-129 b
+  covers the previous catalog epoch (≈161.03); Kepler-131 b covers the
+  previous catalog epoch (≈154.51); Kepler-132 b covers the previous
+  catalog epoch (≈162.68); Kepler-136 b covers the previous catalog
+  epoch (≈164.01).
   Kepler-42 b, Kepler-32 b/c, Kepler-26 b, Kepler-28 b/c, Kepler-29 b/c,
   Kepler-13 b, Kepler-39 b, Kepler-40 b, Kepler-45 b, Kepler-49 b, Kepler-50 b, Kepler-52 b, Kepler-55 d, Kepler-63 b, Kepler-75 b,
   Kepler-81 b/c, Kepler-82 b, Kepler-83 b/d, Kepler-92 b, Kepler-97 b,
-  Kepler-98 b, Kepler-99 b, Kepler-101 b, Kepler-109 b, Kepler-125 b, and Kepler-186 c use folded catalog transits. Those transits were not
+  Kepler-98 b, Kepler-99 b, Kepler-101 b, Kepler-109 b, Kepler-125 b, Kepler-127 c, Kepler-134 b, Kepler-135 b, and Kepler-186 c use folded catalog transits. Those transits were not
   invented. Kepler-11 c/d/e and Kepler-9 c reuse the host-star Q1 extract.
   Kepler-11 f/g catalog epochs do not fall in Q1; no transit was invented.
 - Kepler-1625 b, Kepler-1708 b, and Kepler-167 e are **holdouts**.

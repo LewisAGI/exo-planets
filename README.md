@@ -31,7 +31,7 @@ results. HEK II–V are **all null**. Named objects stay
    Kepler-37 b/c/d, Kepler-42 b/c/d, Kepler-48 b–d, Kepler-51 b, Kepler-62 c/d/e,
    Kepler-65 b/c/d, Kepler-68 c, Kepler-79 b–e, Kepler-80 c–f, Kepler-81 b/c/d,
    Kepler-88 b,
-   Kepler-89 b–e, Kepler-90 b/c/d/e/h, Kepler-91 b, Kepler-92 b/c/d, Kepler-93 b, Kepler-94 b, Kepler-95 b, Kepler-96 b, Kepler-97 b, Kepler-98 b, Kepler-99 b, Kepler-100 b/c/d, Kepler-101 b/c, Kepler-102 b–f, Kepler-103 b, Kepler-104 b/c, Kepler-105 b/c, Kepler-106 b–e, Kepler-107 b–e, Kepler-108 b, Kepler-109 b, Kepler-110 b, Kepler-111 b, Kepler-112 b, Kepler-113 b, Kepler-114 b/c, Kepler-115 b/c, Kepler-116 b/c, Kepler-117 b/c, Kepler-118 b, Kepler-119 b, Kepler-120 b, Kepler-121 b/c, Kepler-122 b–f, Kepler-123 b, Kepler-124 b/c, Kepler-125 b, Kepler-126 b/c/d, Kepler-138 b/c/d,
+   Kepler-89 b–e, Kepler-90 b/c/d/e/h, Kepler-91 b, Kepler-92 b/c/d, Kepler-93 b, Kepler-94 b, Kepler-95 b, Kepler-96 b, Kepler-97 b, Kepler-98 b, Kepler-99 b, Kepler-100 b/c/d, Kepler-101 b/c, Kepler-102 b–f, Kepler-103 b, Kepler-104 b/c, Kepler-105 b/c, Kepler-106 b–e, Kepler-107 b–e, Kepler-108 b, Kepler-109 b, Kepler-110 b, Kepler-111 b, Kepler-112 b, Kepler-113 b, Kepler-114 b/c, Kepler-115 b/c, Kepler-116 b/c, Kepler-117 b/c, Kepler-118 b, Kepler-119 b, Kepler-120 b, Kepler-121 b/c, Kepler-122 b–f, Kepler-123 b, Kepler-124 b/c, Kepler-125 b, Kepler-126 b/c/d, Kepler-127 b/c, Kepler-128 b, Kepler-129 b, Kepler-130 b, Kepler-131 b, Kepler-132 b, Kepler-133 b, Kepler-134 b, Kepler-135 b, Kepler-136 b/c, Kepler-138 b/c/d,
    Kepler-186 b–e, Kepler-444 b–f, Kepler-22 b Q1,
    K2-3 b/c C1, K2-18 b C1, plus holdout-host Q1/Q8 windows
    for Kepler-1625 b,
@@ -190,7 +190,13 @@ They are never trained as confirmed moons. The classifier’s
   holdout, not a moon), Kepler-118 b Q1, Kepler-119 b Q1, Kepler-120 b Q1,
   Kepler-121 b/c Q1, Kepler-122 b–f Q1, Kepler-123 b Q1, Kepler-124 b/c Q1,
   Kepler-125 b Q1 (folded catalog transits), Kepler-126 b/c/d Q1 (126 b
-  previous epoch ≈162.30; 126 d previous epoch ≈144.76),
+  previous epoch ≈162.30; 126 d previous epoch ≈144.76), Kepler-127 b/c Q1
+  (127 c folded catalog transit ≈150.28), Kepler-128 b Q1 (previous epoch
+  ≈160.86), Kepler-129 b Q1 (previous epoch ≈161.03), Kepler-130 b Q1,
+  Kepler-131 b Q1 (previous epoch ≈154.51), Kepler-132 b Q1 (previous epoch
+  ≈162.68), Kepler-133 b Q1, Kepler-134 b Q1 (folded catalog transits),
+  Kepler-135 b Q1 (folded catalog transits), Kepler-136 b/c Q1 (136 b
+  previous epoch ≈164.01),
   Kepler-138 b/c/d Q1, Kepler-186 b–e Q1, Kepler-444 b–f Q1,
   Kepler-22 b
   Q1 (catalog transit in-window, not invented; Kepler-12 b, 25 b, 30 c,
