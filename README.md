@@ -31,7 +31,7 @@ results. HEK II–V are **all null**. Named objects stay
    Kepler-37 b/c/d, Kepler-42 b/c/d, Kepler-48 b–d, Kepler-51 b, Kepler-62 c/d/e,
    Kepler-65 b/c/d, Kepler-68 c, Kepler-79 b–e, Kepler-80 c–f, Kepler-81 b/c/d,
    Kepler-88 b,
-   Kepler-89 b–e, Kepler-91 b, Kepler-92 b/c/d, Kepler-93 b, Kepler-94 b, Kepler-95 b, Kepler-96 b, Kepler-97 b, Kepler-98 b, Kepler-99 b, Kepler-100 b/c/d, Kepler-101 b/c, Kepler-102 b–f, Kepler-103 b, Kepler-104 b/c, Kepler-105 b/c, Kepler-106 b–e, Kepler-107 b–e, Kepler-108 b, Kepler-109 b, Kepler-110 b, Kepler-111 b, Kepler-112 b, Kepler-113 b, Kepler-114 b/c, Kepler-115 b/c, Kepler-116 b/c, Kepler-117 b/c, Kepler-138 b/c/d,
+   Kepler-89 b–e, Kepler-90 b/c/d/e/h, Kepler-91 b, Kepler-92 b/c/d, Kepler-93 b, Kepler-94 b, Kepler-95 b, Kepler-96 b, Kepler-97 b, Kepler-98 b, Kepler-99 b, Kepler-100 b/c/d, Kepler-101 b/c, Kepler-102 b–f, Kepler-103 b, Kepler-104 b/c, Kepler-105 b/c, Kepler-106 b–e, Kepler-107 b–e, Kepler-108 b, Kepler-109 b, Kepler-110 b, Kepler-111 b, Kepler-112 b, Kepler-113 b, Kepler-114 b/c, Kepler-115 b/c, Kepler-116 b/c, Kepler-117 b/c, Kepler-118 b, Kepler-119 b, Kepler-120 b, Kepler-121 b/c, Kepler-122 b–f, Kepler-123 b, Kepler-124 b/c, Kepler-125 b, Kepler-126 b/c/d, Kepler-138 b/c/d,
    Kepler-186 b–e, Kepler-444 b–f, Kepler-22 b Q1,
    K2-3 b/c C1, K2-18 b C1, plus holdout-host Q1/Q8 windows
    for Kepler-1625 b,
@@ -186,10 +186,15 @@ They are never trained as confirmed moons. The classifier’s
   (folded catalog transits), Kepler-110 b Q1, Kepler-111 b Q1, Kepler-112 b Q1,
   Kepler-113 b Q1 (next catalog epoch ≈133.30), Kepler-114 b/c Q1,
   Kepler-115 b/c Q1, Kepler-116 b/c Q1, Kepler-117 b/c Q1,
+  Kepler-90 b/c/d/e/h Q1 (confirmed planets; 90 f misses Q1; 90 g stays a
+  holdout, not a moon), Kepler-118 b Q1, Kepler-119 b Q1, Kepler-120 b Q1,
+  Kepler-121 b/c Q1, Kepler-122 b–f Q1, Kepler-123 b Q1, Kepler-124 b/c Q1,
+  Kepler-125 b Q1 (folded catalog transits), Kepler-126 b/c/d Q1 (126 b
+  previous epoch ≈162.30; 126 d previous epoch ≈144.76),
   Kepler-138 b/c/d Q1, Kepler-186 b–e Q1, Kepler-444 b–f Q1,
   Kepler-22 b
   Q1 (catalog transit in-window, not invented; Kepler-12 b, 25 b, 30 c,
-  51 c/d, 62 b, 62 f, 68 b, 80 b, 82 c, 103 c, 104 d, and 186 f miss Q1 and were not cached;
+  51 c/d, 62 b, 62 f, 68 b, 80 b, 82 c, 90 f, 103 c, 104 d, and 186 f miss Q1 and were not cached;
   Kepler-67 b Q1 LLC 404 and was not invented), K2-3 b/c C1
   (no catalog epoch; extra-dip unwindowed), K2-18 b C1, Kepler-1625 b Q8,
   Kepler-1708 b Q1, Kepler-167 e Q1.
