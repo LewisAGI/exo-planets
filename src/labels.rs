@@ -15,8 +15,9 @@ pub enum Split {
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]
 pub enum ExampleKind {
-    /// Confirmed planet / KOI used as a planet-only row. Timing is *synthetic
-    /// null noise*, not a published TTV non-detection.
+    /// Confirmed planet / KOI used as a planet-only row. Timing is Holczer
+    /// Table 4 S(O−C) when the KOI matches (planet-only, not a moon), else
+    /// synthetic white noise — not a published moon non-detection.
     PlanetOnly,
     /// Synthetic moon TTV/TDV on real planet parameters. Training only.
     Injected,

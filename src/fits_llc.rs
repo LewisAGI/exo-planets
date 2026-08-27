@@ -147,7 +147,7 @@ pub fn parse_llc_fits(data: &[u8]) -> Result<Vec<LlcRow>> {
             form_size(form).ok_or_else(|| ExoError::Parse(format!("unsupported TFORM {form}")))?;
         if matches!(
             name.as_str(),
-            "TIME" | "PDCSAP_FLUX" | "PDCSAP_FLUX_ERR" | "SAP_QUALITY"
+            "TIME" | "PDCSAP_FLUX" | "PDCSAP_FLUX_ERR" | "SAP_QUALITY" | "QUALITY"
         ) {
             want.insert(name, (fmt, cursor));
         }
@@ -160,7 +160,10 @@ pub fn parse_llc_fits(data: &[u8]) -> Result<Vec<LlcRow>> {
         .get("PDCSAP_FLUX")
         .ok_or_else(|| ExoError::Parse("PDCSAP_FLUX column missing".into()))?;
     let ferr = want.get("PDCSAP_FLUX_ERR").copied();
-    let qual = want.get("SAP_QUALITY").copied();
+    let qual = want
+        .get("SAP_QUALITY")
+        .copied()
+        .or_else(|| want.get("QUALITY").copied());
     if off + rowlen * nrows > data.len() {
         return Err(ExoError::Parse("truncated BINTABLE data".into()));
     }

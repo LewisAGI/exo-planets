@@ -6,7 +6,7 @@ use std::path::PathBuf;
 #[derive(Parser, Debug)]
 #[command(
     name = "exo-planets",
-    about = "Kipping TTV/TDV features, cached MAST Kepler LCs, LUNA-style flags, linfa trainer. Not a moon confirmation engine."
+    about = "Kipping TTV/TDV features, cached MAST Kepler/K2/TESS LCs, Holczer planet-only O-C, LUNA-style flags, linfa trainer. Not a moon confirmation engine."
 )]
 struct Cli {
     #[command(subcommand)]
@@ -15,7 +15,7 @@ struct Cli {
 
 #[derive(Subcommand, Debug)]
 enum Cmd {
-    /// Re-download NASA TAP slices and the cached Kepler LLC FITS extracts.
+    /// Re-download NASA TAP slices, Holczer Table 4, and cached LLC / SPOC extracts.
     Fetch {
         #[arg(long, default_value = "data/cache")]
         cache: PathBuf,

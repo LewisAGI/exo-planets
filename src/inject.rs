@@ -1,8 +1,9 @@
 //! Synthetic TTV/TDV injections for **training only**.
 //!
 //! Injected moons are labelled `injected`. They are not observations.
-//! Planet-only rows get synthetic null timing at a crude Kepler-like noise
-//! scale — also not published non-detections.
+//! Planet-only rows use Holczer+2016 Table 4 S(O−C) when the KOI matches
+//! (published **planet-only** timing, not a moon). Unmatched rows keep
+//! synthetic white timing — also not published non-detections.
 
 use crate::constants::{HEK_LARGE_MOON_MEARTH, KEPLER_MISSION_DAYS_SYNTHETIC};
 use crate::forecaster::ForecasterPrior;
@@ -12,6 +13,7 @@ use crate::ingest::CatalogPlanet;
 use crate::labels::ExampleKind;
 use crate::tdv::{predict_tdv, MoonSense};
 use crate::ttv::{predict_ttv, synthetic_n_transits};
+use crate::ttv_catalog::PublishedTtv;
 use rand::Rng;
 use serde::{Deserialize, Serialize};
 
@@ -62,8 +64,35 @@ pub fn draw_planet_only<R: Rng>(
     rng: &mut R,
     planet: &CatalogPlanet,
     geom: &TransitGeometry,
+    published: Option<&PublishedTtv>,
 ) -> TimingDraw {
     let n = synthetic_n_transits(planet.period_days, KEPLER_MISSION_DAYS_SYNTHETIC);
+    if let Some(pubd) = published {
+        if pubd.s_oc_min > 0.0 && pubd.s_oc_min.is_finite() {
+            let sigma = if pubd.sig_tt_min.is_finite() && pubd.sig_tt_min > 0.0 {
+                pubd.sig_tt_min
+            } else {
+                synthetic_sigma_timing_min(geom, planet.period_days)
+            };
+            let ttv = pubd.s_oc_min;
+            let tdv = rms_of_zero_mean(rng, sigma * 2.5, n);
+            let eta = if ttv > 1e-8 { tdv / ttv } else { 0.0 };
+            return TimingDraw {
+                ttv_rms_min: ttv,
+                tdv_rms_min: tdv,
+                eta,
+                hek_i_maxdev_min: 0.0,
+                moon_period_days: None,
+                sigma_timing_min: sigma,
+                n_transits: n,
+                kind: ExampleKind::PlanetOnly,
+                hypothesis: None,
+                noise_model:
+                    "Holczer+2016 Table 4 S(O-C) — published planet-only O-C scatter, not a moon"
+                        .into(),
+            };
+        }
+    }
     let sigma = synthetic_sigma_timing_min(geom, planet.period_days);
     let ttv = rms_of_zero_mean(rng, sigma, n);
     // Duration noise is typically a few× worse than mid-time.

@@ -2,13 +2,15 @@ use exo_planets::ingest::load_cache;
 use exo_planets::lightcurve::load_lightcurves;
 use exo_planets::model::{evaluate, train};
 use exo_planets::pipeline::build_dataset;
+use exo_planets::ttv_catalog::load_holczer;
 use std::path::Path;
 
 #[test]
 fn linfa_recovers_injected_timing_better_than_null() {
     let planets = load_cache(Path::new("data/cache")).unwrap();
     let lcs = load_lightcurves(Path::new("data/cache")).unwrap();
-    let (train_rows, hold_rows) = build_dataset(&planets, &lcs).unwrap();
+    let ttv = load_holczer(Path::new("data/cache")).unwrap();
+    let (train_rows, hold_rows) = build_dataset(&planets, &lcs, &ttv).unwrap();
     let model = train(&train_rows).expect("linfa fit");
     assert_eq!(
         model.weights.len(),

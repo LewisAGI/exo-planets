@@ -68,6 +68,47 @@ fn parse_synthetic_llc_bintable() {
 }
 
 #[test]
+fn parse_tess_quality_alias() {
+    let mut fits = header_block(&[
+        "SIMPLE  =                    T",
+        "BITPIX  =                    8",
+        "NAXIS   =                    0",
+    ]);
+    let ext = header_block(&[
+        "XTENSION= 'BINTABLE'",
+        "BITPIX  =                    8",
+        "NAXIS   =                    2",
+        "NAXIS1  =                   24",
+        "NAXIS2  =                    1",
+        "PCOUNT  =                    0",
+        "GCOUNT  =                    1",
+        "TFIELDS =                    4",
+        "TTYPE1  = 'TIME    '",
+        "TFORM1  = 'D       '",
+        "TTYPE2  = 'PDCSAP_FLUX'",
+        "TFORM2  = 'E       '",
+        "TTYPE3  = 'PDCSAP_FLUX_ERR'",
+        "TFORM3  = 'E       '",
+        "TTYPE4  = 'QUALITY '",
+        "TFORM4  = 'J       '",
+    ]);
+    fits.extend(ext);
+    let mut data = Vec::new();
+    data.extend(1694.0_f64.to_be_bytes());
+    data.extend(2000.0_f32.to_be_bytes());
+    data.extend(1.0_f32.to_be_bytes());
+    data.extend(0_i32.to_be_bytes());
+    data.extend([0u8; 4]);
+    while data.len() % 2880 != 0 {
+        data.push(0);
+    }
+    fits.extend(data);
+    let rows = parse_llc_fits(&fits).unwrap();
+    assert_eq!(rows.len(), 1);
+    assert!((rows[0].time_bkjd - 1694.0).abs() < 1e-9);
+}
+
+#[test]
 fn parse_downloaded_kepler_q1_when_present() {
     let p = Path::new("/tmp/mast_lc/kplr011904151-2009166043257_llc.fits");
     if !p.exists() {

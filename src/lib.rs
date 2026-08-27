@@ -10,6 +10,7 @@ pub mod fits_llc;
 pub mod forecaster;
 pub mod geometry;
 pub mod hek;
+pub mod hek_v_demo;
 pub mod holdout;
 pub mod ingest;
 pub mod inject;
@@ -21,6 +22,7 @@ pub mod photometry;
 pub mod pipeline;
 pub mod tdv;
 pub mod ttv;
+pub mod ttv_catalog;
 
 pub use error::{ExoError, Result};
 pub use pipeline::{run_fetch, run_train_score, PipelineReport};

@@ -71,15 +71,44 @@ fn wrapped_phase(t: f64, t0: f64, period: f64) -> f64 {
     }
 }
 
-/// Box-subtracted extra-dip SNR on a cached LC. Flags, not a detection.
+/// Merge extra-dip flags across every cached extract for one planet.
 pub fn photometry_flags(
     planet: &CatalogPlanet,
     geom: &TransitGeometry,
-    lc: Option<&LightCurve>,
+    lcs: Option<&[LightCurve]>,
 ) -> PhotometryFlags {
-    let Some(lc) = lc else {
+    let Some(curves) = lcs.filter(|c| !c.is_empty()) else {
         return PhotometryFlags::default();
     };
+    let mut merged = PhotometryFlags::default();
+    merged.lc_available = true;
+    let mut notes = Vec::new();
+    let mut missions = Vec::new();
+    for lc in curves {
+        let one = photometry_flags_one(planet, geom, lc);
+        merged.n_points += one.n_points;
+        merged.n_in_transit += one.n_in_transit;
+        if one.extra_dip_snr > merged.extra_dip_snr {
+            merged.extra_dip_snr = one.extra_dip_snr;
+        }
+        if one.photometry_only_would_flag {
+            merged.photometry_only_would_flag = true;
+            merged.hek_v_caution = true;
+        }
+        missions.push(format!("{} {}", lc.mission, lc.cadence));
+        notes.push(one.notes);
+    }
+    merged.mission = missions.join("+");
+    merged.notes = notes.join(" ");
+    merged
+}
+
+/// Box-subtracted extra-dip SNR on one cached LC. Flags, not a detection.
+pub fn photometry_flags_one(
+    planet: &CatalogPlanet,
+    geom: &TransitGeometry,
+    lc: &LightCurve,
+) -> PhotometryFlags {
     if lc.flux.is_empty() {
         return PhotometryFlags::default();
     }
@@ -149,10 +178,21 @@ pub fn photometry_flags(
     let would = extra_dip_snr >= HEK_I_SIGMA_THRESHOLD && best_run > 0.0;
     let mut notes = format!(
         "{} {} cadence, {} finite PDCSAP points from {}. Extra-dip SNR is a residual flag, not a moon.",
-        lc.mission, "long", lc.len(), lc.cache_file
+        lc.mission, lc.cadence, lc.len(), lc.cache_file
     );
     if planet.name.eq_ignore_ascii_case("Kepler-1625 b") {
         notes.push_str(" This Q8 window does not cover a catalog transit; do not invent one. Moon stays CANDIDATE.");
+    }
+    if planet.name.eq_ignore_ascii_case("Kepler-1708 b") {
+        notes.push_str(" This Q1 window does not cover a catalog transit (P≈737 d); do not invent one. Moon stays CANDIDATE.");
+    }
+    if planet.name.eq_ignore_ascii_case("Kepler-167 e") {
+        notes.push_str(" This Q1 window does not cover a catalog transit (P≈1071 d); do not invent one. Status stays SEARCH.");
+    }
+    if planet.epoch_bkjd.is_none() {
+        notes.push_str(
+            " No catalog epoch in this cache; extra-dip is unwindowed (not a transit invention).",
+        );
     }
     if would {
         notes.push_str(" HEK V: photometry-only (ignoring timing) would have falsely claimed moons in 1/4 of KOIs.");

@@ -1,8 +1,9 @@
 # exo-planets
 
 Rust crate for **Kipping transit / TTV / TDV signatures** on a **public NASA
-Exoplanet Archive TAP slice**, a **cached MAST/Kepler light-curve extract**,
-LUNA-**style flags** (not a LUNA port), plus a small **linfa** logistic model.
+Exoplanet Archive TAP slice**, **cached MAST Kepler / K2 / TESS light-curve
+extracts**, a **Holczer+2016 planet-only O−C catalog**, LUNA-**style flags**
+(not a LUNA port), plus a small **linfa** logistic model.
 
 This is **not** a moon-discovery paper, not a LUNA integrator, and not a
 confirmation engine.
@@ -13,15 +14,19 @@ results. HEK II–V are **all null**. Named objects stay
 
 ## What this is
 
-1. **Ingest** of a cached NASA TAP/CSV sample (KOI `cumulative` + PS `ps`)
-   and three real Kepler long-cadence PDCSAP extracts (Kepler-10 b, Kepler-1 b,
-   Kepler-1625 b). See [`data/cache/lightcurves/SOURCE.md`](data/cache/lightcurves/SOURCE.md).
+1. **Ingest** of a cached NASA TAP/CSV sample (KOI `cumulative` + PS `ps`,
+   including K2-3 hosts), Holczer et al. 2016 Table 4 O−C scatter (VizieR
+   `J/ApJS/225/9`; **planet-only timing, not moons**), and real PDCSAP
+   extracts: Kepler-10 b (Kepler Q1 + TESS S14), Kepler-1 b, K2-3 b (K2 C1),
+   plus holdout-host Q1/Q8 windows for Kepler-1625 b, Kepler-1708 b, and
+   Kepler-167 e. See [`data/cache/lightcurves/SOURCE.md`](data/cache/lightcurves/SOURCE.md).
 2. **Feature layer**: transit geometry (Kipping 2009b / Seager & Mallén-Ornelas),
    circular TTV (Kipping 2009a), TDV-V / first-order TDV-TIP, HEK-style
    dynamical cuts and a **timing Bayes-factor proxy**, FORECASTER mass-prior
    *class* (Chen & Kipping 2017) labelled **extrapolation** when discretized
    from radius, **LUNA-style geometric flags** (overlapping disc / syzygy /
-   extra-dip *possible*), and extra-dip SNR from the cached LCs.
+   extra-dip *possible*), extra-dip SNR from the cached LCs, and a **HEK V
+   photometry-only caution demo** on confirmed-planet LCs (not a detection).
 3. **Trainable model in Rust** (`linfa-logistic`). Train/eval on confirmed KOIs
    as planet-only + **injected** TTV/TDV moons. The four locked systems are
    **holdout score cards only**.
@@ -32,8 +37,11 @@ results. HEK II–V are **all null**. Named objects stay
   photometry. Flags only. Do not cite this as a LUNA port.
 - Not a HEK Bayes factor. The “BF” number is a timing-RMS χ² / BIC **proxy**.
 - Not official FORECASTER posterior draws. Radius bins are a discretization.
-- Not a published TTV catalog. Planet-only timing is **synthetic white noise**.
+- Not a moon TTV catalog. Holczer+2016 Table 4 is **planet-only** O−C scatter
+  (often planet–planet). Unmatched KOIs still use synthetic white timing.
 - Not a confirmation of Kepler-1625b-i, Kepler-1708 b-i, or a Kepler-167e moon.
+- Not a re-estimate of the HEK V ~1/4 false-claim rate. The cached-LC extra-dip
+  demo is a **caution**, including when 0/N LCs trip the cut.
 - Kepler-90g’s moon is a **false positive** (SPSD / pixel-centroid) no matter
   what the classifier outputs.
 
@@ -83,7 +91,9 @@ Locked statuses: [`data/labels/holdout_scorecards.json`](data/labels/holdout_sco
 | HEK VI | η < 0.38 (95%), 284 KOIs | A **dearth**, not a detection. BF~2 is a hint. |
 | FORECASTER | Terran / Neptunian / Jovian / stellar; 2.0^{+0.7}_{-0.6} M⊕ | Prior class only |
 | LUNA-style flags | overlapping disc / syzygy / extra-dip-on-star **possible** | Geometry only. Not LUNA. |
-| LC extra-dip SNR | box residual on cached Kepler PDCSAP | Real photometry; not a detection. |
+| LC extra-dip SNR | box residual on cached Kepler / K2 / TESS PDCSAP | Real photometry; not a detection. |
+| Holczer S(O−C) | Table 4 1.4826×MAD of O−C (minutes) | Published **planet-only** timing. Not a moon. |
+| HEK V demo | extra-dip cut on confirmed-planet cached LCs | Caution, not a detection; not a 1/4 re-estimate. |
 
 The lock text writes `P_SB = P_B / √(D³/3)`. That is the **reciprocal** of the
 Kepler+Hill period. This crate evaluates `P_S = P_B √(D³/3)` and the cut
@@ -113,10 +123,13 @@ They are never trained as confirmed moons. The classifier’s
   moon-nulls. HEK II–V already published those nulls; we do not re-litigate
   them as detections.
 - Injected moons are synthetic and labelled `injected`.
-- Cached Kepler LLC extracts exist for Kepler-10 b, Kepler-1 b, and
-  Kepler-1625 b only. No K2, no TESS, no Hubble, no JWST, no Columbia 1625
-  products. Kepler-1625 Q8 does **not** cover a catalog transit; none was
-  invented. The moon stays **CANDIDATE**.
+- Cached LCs: Kepler-10 b (Kepler Q1 + TESS S14 SPOC), Kepler-1 b Q1, K2-3 b
+  C1, Kepler-1625 b Q8, Kepler-1708 b Q1, Kepler-167 e Q1. No Hubble, no
+  JWST, no Columbia 1625 products. No TESSCut / FFI photometry was invented.
+  Kepler-1625 Q8, Kepler-1708 Q1, and Kepler-167 e Q1 do **not** cover a
+  catalog transit; none was invented. Statuses stay **CANDIDATE / SEARCH**.
+- Holczer+2016 is Table 4 statistics only (not the 295k-row table3 times).
+  KOIs 351.02 / 490.02 / 5084.01 are absent; Kepler-1708 is post-2016.
 - LUNA-style items are **flags**, not a photodynamical integrator.
 - Kepler-90 g has no `default_flag=1` PS row in the 2026-08-27 TAP pull;
   geometry comes from KOI cumulative.

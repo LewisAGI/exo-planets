@@ -2,14 +2,16 @@
 
 use crate::error::Result;
 use crate::features::{build_row, geometry_for, prior_for, resolved_a_au, FeatureRow};
+use crate::hek_v_demo::{hek_v_photometry_only_caution, HekVCautionDemo};
 use crate::holdout::{attach_catalog_and_model, locked_cards, HoldoutCard};
 use crate::ingest::{fetch_cache, load_cache, CatalogPlanet};
 use crate::inject::{default_injections, draw_injected, draw_planet_only};
 use crate::labels::Split;
-use crate::lightcurve::{load_lightcurves, LightCurveIndex};
+use crate::lightcurve::{load_lightcurves, n_cached_lightcurves, LightCurveIndex};
 use crate::luna::luna_style_flags;
 use crate::model::{evaluate, train, EvalReport, TrainedModel};
 use crate::photometry::photometry_flags;
+use crate::ttv_catalog::{load_holczer, lookup_holczer, TtvIndex};
 use rand::SeedableRng;
 use rand_chacha::ChaCha8Rng;
 use serde::{Deserialize, Serialize};
@@ -29,6 +31,8 @@ pub struct PipelineReport {
     pub n_injected_rows: usize,
     pub n_planet_only_rows: usize,
     pub n_cached_lightcurves: usize,
+    pub n_published_ttv_matches: usize,
+    pub hek_v_demo: HekVCautionDemo,
     pub eval_held_fraction: EvalReport,
     pub eval_train: EvalReport,
     pub holdouts: Vec<HoldoutCard>,
@@ -38,6 +42,7 @@ pub struct PipelineReport {
 pub fn build_dataset(
     planets: &[CatalogPlanet],
     lcs: &LightCurveIndex,
+    ttv: &TtvIndex,
 ) -> Result<(Vec<FeatureRow>, Vec<FeatureRow>)> {
     let mut rng = ChaCha8Rng::seed_from_u64(RNG_SEED);
     let mut train_rows = Vec::new();
@@ -48,13 +53,13 @@ pub fn build_dataset(
         }
         let geom = geometry_for(planet);
         let prior = prior_for(planet);
-        let photo = photometry_flags(planet, &geom, lcs.get(&planet.name));
+        let photo = photometry_flags(planet, &geom, lcs.get(&planet.name).map(|v| v.as_slice()));
         let split = if planet.is_holdout_host() {
             Split::Holdout
         } else {
             Split::Train
         };
-        let null = draw_planet_only(&mut rng, planet, &geom);
+        let null = draw_planet_only(&mut rng, planet, &geom, lookup_holczer(ttv, planet));
         let luna0 = luna_style_flags(planet, &geom, &prior, None, resolved_a_au(planet, &geom));
         let row = build_row(planet, &geom, &prior, &null, split, &photo, &luna0);
         if split == Split::Holdout {
@@ -122,7 +127,13 @@ pub fn run_train_score(cache_dir: &Path, out_dir: &Path) -> Result<PipelineRepor
     std::fs::create_dir_all(out_dir)?;
     let planets = load_cache(cache_dir)?;
     let lcs = load_lightcurves(cache_dir)?;
-    let (train_rows, holdout_rows) = build_dataset(&planets, &lcs)?;
+    let ttv = load_holczer(cache_dir)?;
+    let (train_rows, holdout_rows) = build_dataset(&planets, &lcs, &ttv)?;
+    let n_ttv = planets
+        .iter()
+        .filter(|p| lookup_holczer(&ttv, p).is_some())
+        .count();
+    let hek_v_demo = hek_v_photometry_only_caution(&planets, &lcs);
     let n_injected = train_rows
         .iter()
         .filter(|r| r.kind == crate::labels::ExampleKind::Injected)
@@ -150,7 +161,9 @@ pub fn run_train_score(cache_dir: &Path, out_dir: &Path) -> Result<PipelineRepor
         n_train_rows: train_rows.len(),
         n_injected_rows: n_injected,
         n_planet_only_rows: n_po,
-        n_cached_lightcurves: lcs.len(),
+        n_cached_lightcurves: n_cached_lightcurves(&lcs),
+        n_published_ttv_matches: n_ttv,
+        hek_v_demo,
         eval_held_fraction: eval_held,
         eval_train: eval_tr,
         holdouts: cards,
@@ -178,8 +191,18 @@ fn write_json<T: Serialize>(path: &Path, value: &T) -> Result<()> {
 pub fn print_report(report: &PipelineReport) {
     println!("catalog planets: {}", report.n_catalog_planets);
     println!(
-        "cached MAST/Kepler light curves: {}",
+        "cached MAST Kepler/K2/TESS light curves: {}",
         report.n_cached_lightcurves
+    );
+    println!(
+        "Holczer+2016 Table 4 planet-only O-C matches: {} (not moons)",
+        report.n_published_ttv_matches
+    );
+    println!(
+        "HEK V photometry-only caution demo: {}/{} cached confirmed-planet LCs would trip the extra-dip cut (published HEK V ~1/4 of KOIs; this cache is not that experiment). {}",
+        report.hek_v_demo.n_would_flag_photometry_only,
+        report.hek_v_demo.n_planet_only_lightcurves,
+        report.hek_v_demo.note
     );
     println!(
         "train planets / holdout hosts: {} / {}",

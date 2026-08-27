@@ -186,8 +186,12 @@ pub fn attach_catalog_and_model(
                     }
                     card.model_p_injected_like = Some(model.predict_proba(&v));
                     card.model_input = Some(
-                        "catalog features + geometric-mid of locked 1.2–77 min TTV *prediction* (not data)"
-                            .into(),
+                        if row.photometry.lc_available {
+                            "catalog features + geometric-mid of locked 1.2–77 min TTV *prediction* (not data); cached Q1 Kepler LC flags (no catalog transit in that window). Moon stays CANDIDATE."
+                        } else {
+                            "catalog features + geometric-mid of locked 1.2–77 min TTV *prediction* (not data)"
+                        }
+                        .into(),
                     );
                     let _ = p_null;
                 }
@@ -198,8 +202,12 @@ pub fn attach_catalog_and_model(
                     }
                     card.model_p_injected_like = Some(model.predict_proba(&v));
                     card.model_input = Some(
-                        "catalog features + midpoint of locked 7–17 min residual (search, not moon)"
-                            .into(),
+                        if row.photometry.lc_available {
+                            "catalog features + midpoint of locked 7–17 min residual (search, not moon); cached Q1 Kepler LC flags (no catalog transit in that window). Status stays SEARCH."
+                        } else {
+                            "catalog features + midpoint of locked 7–17 min residual (search, not moon)"
+                        }
+                        .into(),
                     );
                 }
                 "Kepler-1625b-i" => {
