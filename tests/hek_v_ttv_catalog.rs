@@ -165,8 +165,14 @@ fn hek_v_demo_is_a_caution_not_a_detection() {
             || r.planet_name == "Kepler-82 c"
             || r.planet_name == "Kepler-103 c"
             || r.planet_name == "Kepler-104 d"
-            || r.planet_name == "Kepler-90 f"),
-        "30 c / 51 c/d / 62 b / 62 f / 68 b / 80 b / 186 f / 82 c / 90 f / 103 c / 104 d catalog epochs miss Q1; do not invent a window"
+            || r.planet_name == "Kepler-90 f"
+            || r.planet_name == "Kepler-139 c"
+            || r.planet_name == "Kepler-140 c"
+            || r.planet_name == "Kepler-146 c"
+            || r.planet_name == "Kepler-148 d"
+            || r.planet_name == "Kepler-149 c"
+            || r.planet_name == "Kepler-149 d"),
+        "30 c / 51 c/d / 62 b / 62 f / 68 b / 80 b / 186 f / 82 c / 90 f / 103 c / 104 d / 139 c / 140 c / 146 c / 148 d / 149 c/d catalog epochs miss Q1; do not invent a window"
     );
     for name in ["K2-3 b", "K2-3 c"] {
         let k2 = demo
@@ -200,7 +206,7 @@ fn k2_hosts_are_planets_not_moons() {
 #[test]
 fn cached_lc_count_and_tess_extract_size() {
     let lcs = load_lightcurves(Path::new("data/cache")).unwrap();
-    assert_eq!(n_cached_lightcurves(&lcs), 251);
+    assert_eq!(n_cached_lightcurves(&lcs), 277);
     let tess = lcs
         .get("Kepler-10 b")
         .unwrap()
@@ -488,6 +494,32 @@ fn hek_v_kepler22_is_windowed_catalog_transit() {
         "Kepler-135 b",
         "Kepler-136 b",
         "Kepler-136 c",
+        "Kepler-137 b",
+        "Kepler-137 c",
+        "Kepler-139 b",
+        "Kepler-139 d",
+        "Kepler-140 b",
+        "Kepler-141 b",
+        "Kepler-141 c",
+        "Kepler-142 b",
+        "Kepler-142 c",
+        "Kepler-142 d",
+        "Kepler-143 b",
+        "Kepler-143 c",
+        "Kepler-144 b",
+        "Kepler-144 c",
+        "Kepler-145 b",
+        "Kepler-145 c",
+        "Kepler-146 b",
+        "Kepler-147 b",
+        "Kepler-147 c",
+        "Kepler-148 b",
+        "Kepler-148 c",
+        "Kepler-149 b",
+        "Kepler-150 b",
+        "Kepler-150 c",
+        "Kepler-150 d",
+        "Kepler-150 e",
     ] {
         let row = demo
             .per_lc
