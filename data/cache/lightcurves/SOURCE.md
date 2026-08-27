@@ -19,6 +19,7 @@ TESS TIME is BTJD (BJD−2457000). Cached TESS times are shifted to BKJD
 | `kepler10b_kic11904151_q1_llc.csv` | Kepler-10 b | KIC 11904151 | Q1 LLC | https://archive.stsci.edu/pub/kepler/lightcurves/0119/011904151/kplr011904151-2009166043257_llc.fits |
 | `kepler10b_tic377780790_tess_s14_pdcsap.csv` | Kepler-10 b | TIC 377780790 | TESS S14 SPOC 2-min | https://archive.stsci.edu/missions/tess/tid/s0014/0000/0003/7778/0790/tess2019198215352-s0014-0000000377780790-0150-s_lc.fits |
 | `kepler1b_kic11446443_q1_llc.csv` | Kepler-1 b (TrES-2b) | KIC 11446443 | Q1 LLC | https://archive.stsci.edu/pub/kepler/lightcurves/0114/011446443/kplr011446443-2009166043257_llc.fits |
+| `kepler22b_kic10593626_q1_llc.csv` | Kepler-22 b | KIC 10593626 | Q1 LLC | https://archive.stsci.edu/pub/kepler/lightcurves/0105/010593626/kplr010593626-2009166043257_llc.fits |
 | `k2_3_epic201367065_c01_llc.csv` | K2-3 b | EPIC 201367065 | K2 C1 LLC | https://archive.stsci.edu/pub/k2/lightcurves/c1/201300000/67000/ktwo201367065-c01_llc.fits |
 | `kepler1625b_kic4760478_q8_llc.csv` | Kepler-1625 b | KIC 4760478 | Q8 LLC | https://archive.stsci.edu/pub/kepler/lightcurves/0047/004760478/kplr004760478-2011073133259_llc.fits |
 | `kepler1708b_kic7906827_q1_llc.csv` | Kepler-1708 b | KIC 7906827 | Q1 LLC | https://archive.stsci.edu/pub/kepler/lightcurves/0079/007906827/kplr007906827-2009166043257_llc.fits |
@@ -29,8 +30,10 @@ TESS FITS uses `QUALITY` (not `SAP_QUALITY`); the extract header stays the same.
 
 Honesty:
 
-- Kepler-10 b, Kepler-1 b, and K2-3 b are **confirmed planets**, used as
-  LC-backed training hosts. They are not moon detections.
+- Kepler-10 b, Kepler-1 b, Kepler-22 b, and K2-3 b are **confirmed planets**,
+  used as LC-backed training hosts. They are not moon detections.
+  Kepler-22 b Q1 covers the catalog epoch (t0≈133.70 BKJD); that transit
+  was not invented.
 - Kepler-1625 b, Kepler-1708 b, and Kepler-167 e are **holdouts**.
   Q8 (1625; BKJD ≈ 735–802) and Q1 (1708, 167e; BKJD ≈ 131–165) do **not**
   cover a catalog transit (P ≈ 287 / 737 / 1071 d). No transit was invented.

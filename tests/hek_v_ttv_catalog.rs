@@ -94,8 +94,8 @@ fn hek_v_demo_is_a_caution_not_a_detection() {
     let lcs = load_lightcurves(Path::new("data/cache")).unwrap();
     let demo = hek_v_photometry_only_caution(&planets, &lcs);
     assert!(
-        demo.n_planet_only_lightcurves >= 3,
-        "Kepler-10 Kepler+TESS, Kepler-1, K2-3"
+        demo.n_planet_only_lightcurves >= 4,
+        "Kepler-10 Kepler+TESS, Kepler-1, Kepler-22, K2-3"
     );
     assert!(!demo.per_lc.iter().any(|r| {
         r.planet_name == "Kepler-1625 b"

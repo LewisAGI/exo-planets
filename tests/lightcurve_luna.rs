@@ -23,12 +23,13 @@ fn cached_lcs_are_real_pdcsap_kepler_k2_tess() {
     let dir = Path::new("data/cache");
     let lcs = load_lightcurves(dir).unwrap();
     assert!(
-        n_cached_lightcurves(&lcs) >= 7,
-        "expected Kepler-10 (2), Kepler-1, 1625, 1708, 167, K2-3"
+        n_cached_lightcurves(&lcs) >= 8,
+        "expected Kepler-10 (2), Kepler-1, Kepler-22, 1625, 1708, 167, K2-3"
     );
     for name in [
         "Kepler-10 b",
         "Kepler-1 b",
+        "Kepler-22 b",
         "Kepler-1625 b",
         "Kepler-1708 b",
         "Kepler-167 e",
@@ -80,6 +81,14 @@ fn extra_dip_flag_is_not_a_moon_and_hek_v_fraction_locked() {
         assert!(photo.hek_v_caution);
         assert!(photo.notes.contains("HEK V"));
     }
+
+    let k22 = planets.iter().find(|p| p.name == "Kepler-22 b").unwrap();
+    let p22 = photometry_flags(k22, &geometry_for(k22), slice(&lcs, "Kepler-22 b"));
+    assert!(p22.lc_available);
+    assert!(
+        p22.n_in_transit > 0,
+        "Kepler-22 b catalog epoch t0≈133.70 falls in Q1; transit is catalog, not invented"
+    );
 
     let k1625 = planets.iter().find(|p| p.name == "Kepler-1625 b").unwrap();
     let g2 = geometry_for(k1625);

@@ -17,9 +17,10 @@ results. HEK II–V are **all null**. Named objects stay
 1. **Ingest** of a cached NASA TAP/CSV sample (KOI `cumulative` + PS `ps`,
    including K2-3 hosts), Holczer et al. 2016 Table 4 O−C scatter (VizieR
    `J/ApJS/225/9`; **planet-only timing, not moons**), and real PDCSAP
-   extracts: Kepler-10 b (Kepler Q1 + TESS S14), Kepler-1 b, K2-3 b (K2 C1),
-   plus holdout-host Q1/Q8 windows for Kepler-1625 b, Kepler-1708 b, and
-   Kepler-167 e. See [`data/cache/lightcurves/SOURCE.md`](data/cache/lightcurves/SOURCE.md).
+   extracts: Kepler-10 b (Kepler Q1 + TESS S14), Kepler-1 b, Kepler-22 b Q1,
+   K2-3 b (K2 C1), plus holdout-host Q1/Q8 windows for Kepler-1625 b,
+   Kepler-1708 b, and Kepler-167 e. See
+   [`data/cache/lightcurves/SOURCE.md`](data/cache/lightcurves/SOURCE.md).
 2. **Feature layer**: transit geometry (Kipping 2009b / Seager & Mallén-Ornelas),
    circular TTV (Kipping 2009a), TDV-V / first-order TDV-TIP, HEK-style
    dynamical cuts and a **timing Bayes-factor proxy**, FORECASTER mass-prior
@@ -123,8 +124,9 @@ They are never trained as confirmed moons. The classifier’s
   moon-nulls. HEK II–V already published those nulls; we do not re-litigate
   them as detections.
 - Injected moons are synthetic and labelled `injected`.
-- Cached LCs: Kepler-10 b (Kepler Q1 + TESS S14 SPOC), Kepler-1 b Q1, K2-3 b
-  C1, Kepler-1625 b Q8, Kepler-1708 b Q1, Kepler-167 e Q1. No Hubble, no
+- Cached LCs: Kepler-10 b (Kepler Q1 + TESS S14 SPOC), Kepler-1 b Q1,
+  Kepler-22 b Q1 (catalog transit in-window, not invented), K2-3 b C1,
+  Kepler-1625 b Q8, Kepler-1708 b Q1, Kepler-167 e Q1. No Hubble, no
   JWST, no Columbia 1625 products. No TESSCut / FFI photometry was invented.
   Kepler-1625 Q8, Kepler-1708 Q1, and Kepler-167 e Q1 do **not** cover a
   catalog transit; none was invented. Statuses stay **CANDIDATE / SEARCH**.
