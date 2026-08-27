@@ -1,9 +1,10 @@
 use exo_planets::constants::HEK_V_PHOTOMETRY_ONLY_FALSE_FRACTION;
+use exo_planets::features::FEATURE_NAMES;
 use exo_planets::hek_v_demo::hek_v_photometry_only_caution;
+use exo_planets::holdout::locked_cards;
 use exo_planets::ingest::load_cache;
-use exo_planets::labels::ExampleKind;
-use exo_planets::lightcurve::load_lightcurves;
-use exo_planets::lightcurve::TESS_BTJD_TO_BKJD_DAYS;
+use exo_planets::labels::{ExampleKind, HoldoutStatus};
+use exo_planets::lightcurve::{load_lightcurves, n_cached_lightcurves, TESS_BTJD_TO_BKJD_DAYS};
 use exo_planets::pipeline::build_dataset;
 use exo_planets::ttv_catalog::{
     kepoi_to_holczer_key, load_holczer, lookup_holczer, parse_table4_dat, HOLCZER_SOURCE,
@@ -137,4 +138,96 @@ fn k2_hosts_are_planets_not_moons() {
     assert!(planets
         .iter()
         .all(|p| !p.name.to_lowercase().contains("moon")));
+}
+
+#[test]
+fn cached_lc_count_and_tess_extract_size() {
+    let lcs = load_lightcurves(Path::new("data/cache")).unwrap();
+    assert_eq!(n_cached_lightcurves(&lcs), 8);
+    let tess = lcs
+        .get("Kepler-10 b")
+        .unwrap()
+        .iter()
+        .find(|lc| lc.mission == "TESS")
+        .unwrap();
+    assert_eq!(tess.len(), 2500);
+    assert!(tess.time_bkjd[0] > 3800.0);
+}
+
+#[test]
+fn holczer_kepler1_is_planet_only_scatter() {
+    let planets = load_cache(Path::new("data/cache")).unwrap();
+    let ttv = load_holczer(Path::new("data/cache")).unwrap();
+    let k1 = planets.iter().find(|p| p.name == "Kepler-1 b").unwrap();
+    let pubd = lookup_holczer(&ttv, k1).expect("Kepler-1 b = KOI 1.01");
+    assert!((pubd.s_oc_min - 0.09).abs() < 1e-6);
+    assert!(pubd.source.contains("Holczer"));
+}
+
+#[test]
+fn injected_rows_are_not_labelled_holczer_planet_only() {
+    let planets = load_cache(Path::new("data/cache")).unwrap();
+    let lcs = load_lightcurves(Path::new("data/cache")).unwrap();
+    let ttv = load_holczer(Path::new("data/cache")).unwrap();
+    let (train, _) = build_dataset(&planets, &lcs, &ttv).unwrap();
+    for r in train.iter().filter(|r| r.kind == ExampleKind::Injected) {
+        assert!(r.id.contains("injected"));
+        assert!(r.timing.noise_model.contains("injected"));
+        assert!(!r.timing.noise_model.contains("not a moon"));
+        assert_eq!(r.vector.len(), FEATURE_NAMES.len());
+    }
+}
+
+#[test]
+fn hek_v_kepler22_is_windowed_catalog_transit() {
+    let planets = load_cache(Path::new("data/cache")).unwrap();
+    let lcs = load_lightcurves(Path::new("data/cache")).unwrap();
+    let demo = hek_v_photometry_only_caution(&planets, &lcs);
+    let k22 = demo
+        .per_lc
+        .iter()
+        .find(|r| r.planet_name == "Kepler-22 b")
+        .expect("Kepler-22 b in HEK V demo");
+    assert!(k22.windowed);
+    assert!(k22.n_in_transit > 0);
+    // Cache fraction is not the published 1/4.
+    assert!((demo.fraction_on_this_cache - HEK_V_PHOTOMETRY_ONLY_FALSE_FRACTION).abs() > 1e-6);
+}
+
+#[test]
+fn locked_cards_still_four_named_statuses() {
+    let cards = locked_cards();
+    assert_eq!(cards.len(), 4);
+    assert_eq!(
+        cards
+            .iter()
+            .find(|c| c.object_id == "Kepler-1625b-i")
+            .unwrap()
+            .status,
+        HoldoutStatus::Candidate
+    );
+    assert_eq!(
+        cards
+            .iter()
+            .find(|c| c.object_id == "Kepler-1708 b-i")
+            .unwrap()
+            .status,
+        HoldoutStatus::Candidate
+    );
+    assert_eq!(
+        cards
+            .iter()
+            .find(|c| c.object_id == "Kepler-90g moon")
+            .unwrap()
+            .status,
+        HoldoutStatus::FalsePositive
+    );
+    assert_eq!(
+        cards
+            .iter()
+            .find(|c| c.object_id.contains("167"))
+            .unwrap()
+            .status,
+        HoldoutStatus::Search
+    );
 }
