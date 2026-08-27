@@ -138,15 +138,18 @@ fn hek_v_demo_is_a_caution_not_a_detection() {
     );
     assert!(k11.n_in_transit > 0);
     assert!(!demo.per_lc.iter().any(|r| r.planet_name == "Kepler-90 g"));
-    let k2 = demo
-        .per_lc
-        .iter()
-        .find(|r| r.planet_name == "K2-3 b")
-        .expect("K2-3 b in HEK V demo");
-    assert!(
-        !k2.windowed,
-        "cached PS row has no epoch; do not invent one"
-    );
+    for name in ["K2-3 b", "K2-3 c"] {
+        let k2 = demo
+            .per_lc
+            .iter()
+            .find(|r| r.planet_name == name)
+            .unwrap_or_else(|| panic!("{name} in HEK V demo"));
+        assert!(
+            !k2.windowed,
+            "{name} cached PS row has no epoch; do not invent one"
+        );
+        assert_eq!(k2.n_in_transit, 0);
+    }
 }
 
 #[test]
@@ -167,7 +170,7 @@ fn k2_hosts_are_planets_not_moons() {
 #[test]
 fn cached_lc_count_and_tess_extract_size() {
     let lcs = load_lightcurves(Path::new("data/cache")).unwrap();
-    assert_eq!(n_cached_lightcurves(&lcs), 20);
+    assert_eq!(n_cached_lightcurves(&lcs), 21);
     let tess = lcs
         .get("Kepler-10 b")
         .unwrap()

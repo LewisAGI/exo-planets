@@ -1,6 +1,6 @@
 use exo_planets::constants::HEK_V_PHOTOMETRY_ONLY_FALSE_FRACTION;
 use exo_planets::constants::{DMAX_PROGRADE, DMAX_RETROGRADE};
-use exo_planets::features::geometry_for;
+use exo_planets::features::{geometry_for, FEATURE_NAMES};
 use exo_planets::ingest::load_cache;
 use exo_planets::ingest::{CatalogPlanet, CatalogSource};
 use exo_planets::inject::MoonHypothesis;
@@ -27,7 +27,7 @@ fn cached_lcs_are_real_pdcsap_kepler_k2_tess() {
     let dir = Path::new("data/cache");
     let lcs = load_lightcurves(dir).unwrap();
     assert!(
-        n_cached_lightcurves(&lcs) >= 20,
+        n_cached_lightcurves(&lcs) >= 21,
         "expected Kepler-10 (2), Kepler-1/2/4–9/11/22 + siblings, 1625, 1708, 167, K2-3, K2-18"
     );
     for name in [
@@ -49,6 +49,7 @@ fn cached_lcs_are_real_pdcsap_kepler_k2_tess() {
         "Kepler-1708 b",
         "Kepler-167 e",
         "K2-3 b",
+        "K2-3 c",
         "K2-18 b",
     ] {
         let curves = lcs.get(name).unwrap_or_else(|| panic!("missing {name}"));
@@ -322,6 +323,13 @@ fn injected_rows_carry_luna_flags_holdouts_do_not_train_moons() {
         .iter()
         .find(|r| r.kind == ExampleKind::Injected)
         .unwrap();
+    assert_eq!(FEATURE_NAMES.len(), 25);
+    assert!(
+        !FEATURE_NAMES.contains(&"syzygy_timescale_hr")
+            && !FEATURE_NAMES.contains(&"d_inside_dmax")
+            && !FEATURE_NAMES.contains(&"moon_can_miss_star"),
+        "new LUNA-style scalars stay off the model vector (geometry notes only)"
+    );
     assert!(inj.luna.overlapping_disc_possible);
     assert!(inj.luna.method.contains("Not a LUNA integrator"));
     let po = train

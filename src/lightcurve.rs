@@ -266,6 +266,18 @@ pub fn cached_specs() -> Vec<LightCurveSpec> {
             extract_mid_points: None,
         },
         LightCurveSpec {
+            name: "K2-3 c",
+            target_id: 201_367_065,
+            id_kind: "EPIC",
+            mission: "K2",
+            cadence: "long",
+            cache_csv: "lightcurves/k2_3_epic201367065_c01_llc.csv",
+            source_url: "https://archive.stsci.edu/pub/k2/lightcurves/c1/201300000/67000/ktwo201367065-c01_llc.fits",
+            note: "Same K2 C1 LLC as K2-3 b. Cached PS row has no transit epoch; extra-dip is unwindowed. Do not invent one. Not a moon.",
+            time_offset_days: 0.0,
+            extract_mid_points: None,
+        },
+        LightCurveSpec {
             name: "K2-18 b",
             target_id: 201_912_552,
             id_kind: "EPIC",

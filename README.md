@@ -20,7 +20,7 @@ results. HEK II–V are **all null**. Named objects stay
    MAST/DOI **metadata** (SEARCH; no NIRSpec LC), and real PDCSAP extracts:
    Kepler-10 b (Kepler Q1 + TESS S14), Kepler-1 b, Kepler-2 b,
    Kepler-4–8 b Q1, Kepler-9 b/c Q1, Kepler-11 b/c/d Q1, Kepler-22 b Q1,
-   K2-3 b C1, K2-18 b C1, plus holdout-host Q1/Q8 windows
+   K2-3 b/c C1, K2-18 b C1, plus holdout-host Q1/Q8 windows
    for Kepler-1625 b,
    Kepler-1708 b, and Kepler-167 e. See
    [`data/cache/lightcurves/SOURCE.md`](data/cache/lightcurves/SOURCE.md).
@@ -130,8 +130,9 @@ They are never trained as confirmed moons. The classifier’s
 - Cached LCs: Kepler-10 b (Kepler Q1 + TESS S14 SPOC), Kepler-1 b Q1,
   Kepler-2 b Q1, Kepler-4–8 b Q1, Kepler-9 b/c Q1 (prior catalog epochs
   ≈163.27 / ≈136.52 in-window), Kepler-11 b/c/d Q1 (catalog t0 in-window),
-  Kepler-22 b Q1 (catalog transit in-window, not invented), K2-3 b C1,
-  K2-18 b C1, Kepler-1625 b Q8, Kepler-1708 b Q1, Kepler-167 e Q1.
+  Kepler-22 b Q1 (catalog transit in-window, not invented), K2-3 b/c C1
+  (no catalog epoch; extra-dip unwindowed), K2-18 b C1, Kepler-1625 b Q8,
+  Kepler-1708 b Q1, Kepler-167 e Q1.
   JWST GO 6491 is **MAST/DOI metadata only** (SEARCH; no NIRSpec time
   series cached). Columbia Academic Commons 1625 `/download` was **404**
   behind Anubis; no Hubble product cached. No TESSCut / FFI photometry

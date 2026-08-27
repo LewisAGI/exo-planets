@@ -53,7 +53,8 @@ Honesty:
 - Kepler-1708 has a public Kepler LLC (preferred over FFI-only TESS).
   Kepler-167 e likewise. TESS for 1708 is FFI-only (TIC 272716898); no
   TESSCut photometry was invented.
-- K2-3 b cached PS row has no transit epoch; extra-dip is unwindowed.
+- K2-3 b/c cached PS rows have no transit epoch; extra-dip is unwindowed.
+  K2-3 c reuses the K2-3 b C1 extract. Do not invent an epoch.
 - No Hubble or Columbia 1625 photometry (Academic Commons `/download` 404).
   JWST GO 6491 is metadata only (`jwst_go6491_*.json/csv` in `data/cache/`),
   not a NIRSpec light curve.
