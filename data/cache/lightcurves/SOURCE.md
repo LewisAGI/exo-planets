@@ -19,6 +19,7 @@ TESS TIME is BTJD (BJD−2457000). Cached TESS times are shifted to BKJD
 | `kepler10b_kic11904151_q1_llc.csv` | Kepler-10 b | KIC 11904151 | Q1 LLC | https://archive.stsci.edu/pub/kepler/lightcurves/0119/011904151/kplr011904151-2009166043257_llc.fits |
 | `kepler10b_tic377780790_tess_s14_pdcsap.csv` | Kepler-10 b | TIC 377780790 | TESS S14 SPOC 2-min | https://archive.stsci.edu/missions/tess/tid/s0014/0000/0003/7778/0790/tess2019198215352-s0014-0000000377780790-0150-s_lc.fits |
 | `kepler1b_kic11446443_q1_llc.csv` | Kepler-1 b (TrES-2b) | KIC 11446443 | Q1 LLC | https://archive.stsci.edu/pub/kepler/lightcurves/0114/011446443/kplr011446443-2009166043257_llc.fits |
+| `kepler11b_kic6541920_q1_llc.csv` | Kepler-11 b | KIC 6541920 | Q1 LLC | https://archive.stsci.edu/pub/kepler/lightcurves/0065/006541920/kplr006541920-2009166043257_llc.fits |
 | `kepler22b_kic10593626_q1_llc.csv` | Kepler-22 b | KIC 10593626 | Q1 LLC | https://archive.stsci.edu/pub/kepler/lightcurves/0105/010593626/kplr010593626-2009166043257_llc.fits |
 | `k2_3_epic201367065_c01_llc.csv` | K2-3 b | EPIC 201367065 | K2 C1 LLC | https://archive.stsci.edu/pub/k2/lightcurves/c1/201300000/67000/ktwo201367065-c01_llc.fits |
 | `k2_18_epic201912552_c01_llc.csv` | K2-18 b | EPIC 201912552 | K2 C1 LLC | https://archive.stsci.edu/pub/k2/lightcurves/c1/201900000/12000/ktwo201912552-c01_llc.fits |
@@ -31,8 +32,8 @@ TESS FITS uses `QUALITY` (not `SAP_QUALITY`); the extract header stays the same.
 
 Honesty:
 
-- Kepler-10 b, Kepler-1 b, Kepler-22 b, K2-3 b, and K2-18 b are
-  **confirmed planets**, used as LC-backed training hosts. They are not
+- Kepler-10 b, Kepler-1 b, Kepler-11 b, Kepler-22 b, K2-3 b, and K2-18 b
+  are **confirmed planets**, used as LC-backed training hosts. They are not
   moon detections.
   Kepler-22 b Q1 covers the catalog epoch (t0≈133.70 BKJD); that transit
   was not invented.

@@ -18,8 +18,9 @@ results. HEK II–V are **all null**. Named objects stay
    including K2-3 / K2-18 hosts), Holczer et al. 2016 Table 4 O−C scatter
    (VizieR `J/ApJS/225/9`; **planet-only timing, not moons**), JWST GO 6491
    MAST/DOI **metadata** (SEARCH; no NIRSpec LC), and real PDCSAP extracts:
-   Kepler-10 b (Kepler Q1 + TESS S14), Kepler-1 b, Kepler-22 b Q1, K2-3 b
-   C1, K2-18 b C1, plus holdout-host Q1/Q8 windows for Kepler-1625 b,
+   Kepler-10 b (Kepler Q1 + TESS S14), Kepler-1 b, Kepler-11 b Q1,
+   Kepler-22 b Q1, K2-3 b C1, K2-18 b C1, plus holdout-host Q1/Q8 windows
+   for Kepler-1625 b,
    Kepler-1708 b, and Kepler-167 e. See
    [`data/cache/lightcurves/SOURCE.md`](data/cache/lightcurves/SOURCE.md).
 2. **Feature layer**: transit geometry (Kipping 2009b / Seager & Mallén-Ornelas),
@@ -92,7 +93,7 @@ Locked statuses: [`data/labels/holdout_scorecards.json`](data/labels/holdout_sco
 | HEK V | photometry-only extra-dip flag | Would have false-claimed ~1/4 of KOIs. A fire is a **caution**, not a moon. |
 | HEK VI | η < 0.38 (95%), 284 KOIs | A **dearth**, not a detection. BF~2 is a hint. |
 | FORECASTER | Terran / Neptunian / Jovian / stellar; 2.0^{+0.7}_{-0.6} M⊕ | Prior class only |
-| LUNA-style flags | overlapping disc / syzygy / extra-dip-on-star **possible** | Geometry only. Not LUNA. |
+| LUNA-style flags | overlapping disc / syzygy / extra-dip-on-star **possible**; D vs D_max; coplanar syzygy timescale (R_p+R_m)/a_S × P_S/(2π) | Geometry only. Not LUNA. |
 | LC extra-dip SNR | box residual on cached Kepler / K2 / TESS PDCSAP | Real photometry; not a detection. |
 | Holczer S(O−C) | Table 4 1.4826×MAD of O−C (minutes) | Published **planet-only** timing. Not a moon. |
 | HEK V demo | extra-dip cut on confirmed-planet cached LCs | Caution, not a detection; not a 1/4 re-estimate. |
@@ -126,8 +127,8 @@ They are never trained as confirmed moons. The classifier’s
   them as detections.
 - Injected moons are synthetic and labelled `injected`.
 - Cached LCs: Kepler-10 b (Kepler Q1 + TESS S14 SPOC), Kepler-1 b Q1,
-  Kepler-22 b Q1 (catalog transit in-window, not invented), K2-3 b C1,
-  K2-18 b C1, Kepler-1625 b Q8, Kepler-1708 b Q1, Kepler-167 e Q1.
+  Kepler-11 b Q1, Kepler-22 b Q1 (catalog transit in-window, not invented),
+  K2-3 b C1, K2-18 b C1, Kepler-1625 b Q8, Kepler-1708 b Q1, Kepler-167 e Q1.
   JWST GO 6491 is **MAST/DOI metadata only** (SEARCH; no NIRSpec time
   series cached). Columbia Academic Commons 1625 `/download` was **404**
   behind Anubis; no Hubble product cached. No TESSCut / FFI photometry

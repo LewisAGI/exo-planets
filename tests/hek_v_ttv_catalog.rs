@@ -1,4 +1,4 @@
-use exo_planets::constants::HEK_V_PHOTOMETRY_ONLY_FALSE_FRACTION;
+use exo_planets::constants::{HEK_I_SIGMA_THRESHOLD, HEK_V_PHOTOMETRY_ONLY_FALSE_FRACTION};
 use exo_planets::features::FEATURE_NAMES;
 use exo_planets::hek_v_demo::hek_v_photometry_only_caution;
 use exo_planets::holdout::locked_cards;
@@ -114,7 +114,30 @@ fn hek_v_demo_is_a_caution_not_a_detection() {
     for row in &demo.per_lc {
         assert!(row.extra_dip_snr.is_finite());
         assert!(row.n_points > 0);
+        if row.photometry_only_would_flag {
+            assert!(
+                row.extra_dip_snr >= HEK_I_SIGMA_THRESHOLD,
+                "{} extra-dip SNR {} below HEK I 4σ scale",
+                row.planet_name,
+                row.extra_dip_snr
+            );
+        }
     }
+    assert!(
+        demo.per_lc.iter().any(|r| r.planet_name == "Kepler-11 b"),
+        "Kepler-11 b Q1 is a confirmed-planet LC in the HEK V demo"
+    );
+    let k11 = demo
+        .per_lc
+        .iter()
+        .find(|r| r.planet_name == "Kepler-11 b")
+        .unwrap();
+    assert!(
+        !k11.windowed,
+        "named-PS Kepler-11 b has no KOI epoch; do not invent one"
+    );
+    assert_eq!(k11.n_in_transit, 0);
+    assert!(!demo.per_lc.iter().any(|r| r.planet_name == "Kepler-90 g"));
     let k2 = demo
         .per_lc
         .iter()
@@ -144,7 +167,7 @@ fn k2_hosts_are_planets_not_moons() {
 #[test]
 fn cached_lc_count_and_tess_extract_size() {
     let lcs = load_lightcurves(Path::new("data/cache")).unwrap();
-    assert_eq!(n_cached_lightcurves(&lcs), 9);
+    assert_eq!(n_cached_lightcurves(&lcs), 10);
     let tess = lcs
         .get("Kepler-10 b")
         .unwrap()

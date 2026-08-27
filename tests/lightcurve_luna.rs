@@ -1,10 +1,14 @@
 use exo_planets::constants::HEK_V_PHOTOMETRY_ONLY_FALSE_FRACTION;
+use exo_planets::constants::{DMAX_PROGRADE, DMAX_RETROGRADE};
 use exo_planets::features::geometry_for;
 use exo_planets::ingest::load_cache;
+use exo_planets::ingest::{CatalogPlanet, CatalogSource};
 use exo_planets::inject::MoonHypothesis;
 use exo_planets::labels::ExampleKind;
 use exo_planets::lightcurve::{load_lightcurves, n_cached_lightcurves, peek_header};
-use exo_planets::luna::{luna_style_flags, moon_radius_earth_extrap};
+use exo_planets::luna::{
+    extra_dip_possible, luna_style_flags, moon_radius_earth_extrap, syzygy_timescale_hours,
+};
 use exo_planets::photometry::photometry_flags;
 use exo_planets::pipeline::build_dataset;
 use exo_planets::tdv::MoonSense;
@@ -23,12 +27,13 @@ fn cached_lcs_are_real_pdcsap_kepler_k2_tess() {
     let dir = Path::new("data/cache");
     let lcs = load_lightcurves(dir).unwrap();
     assert!(
-        n_cached_lightcurves(&lcs) >= 9,
-        "expected Kepler-10 (2), Kepler-1, Kepler-22, 1625, 1708, 167, K2-3, K2-18"
+        n_cached_lightcurves(&lcs) >= 10,
+        "expected Kepler-10 (2), Kepler-1, Kepler-11, Kepler-22, 1625, 1708, 167, K2-3, K2-18"
     );
     for name in [
         "Kepler-10 b",
         "Kepler-1 b",
+        "Kepler-11 b",
         "Kepler-22 b",
         "Kepler-1625 b",
         "Kepler-1708 b",
@@ -118,6 +123,19 @@ fn extra_dip_flag_is_not_a_moon_and_hek_v_fraction_locked() {
         "167e Q1 has no catalog transit; do not invent one"
     );
     assert!(p167.notes.contains("SEARCH"));
+
+    let k11 = planets.iter().find(|p| p.name == "Kepler-11 b").unwrap();
+    assert!(
+        k11.epoch_bkjd.is_none(),
+        "named-PS Kepler-11 b has no KOI epoch in this cache"
+    );
+    let p11 = photometry_flags(k11, &geometry_for(k11), slice(&lcs, "Kepler-11 b"));
+    assert!(p11.lc_available);
+    assert_eq!(
+        p11.n_in_transit, 0,
+        "no catalog epoch; do not invent a Kepler-11 b transit window"
+    );
+    assert!(p11.notes.contains("unwindowed"));
 }
 
 #[test]
@@ -139,13 +157,97 @@ fn luna_style_flags_are_geometric_not_an_integrator() {
     assert!(on.overlapping_disc_possible);
     assert!(on.syzygy_in_transit_possible);
     assert!(on.extra_dip_on_star_possible);
+    assert!(!on.moon_can_miss_star);
+    assert!(on.d_inside_dmax);
     assert!(on.moon_k > 0.0);
+    assert!(on.syzygy_timescale_hr > 0.0);
     assert!(on.method.contains("Not a LUNA integrator"));
     assert!(moon_radius_earth_extrap(1.0) > 0.5);
 
     let no_a = luna_style_flags(k10, &geom, &prior, Some(&hypo), None);
     assert!(!no_a.overlapping_disc_possible);
     assert!(no_a.method.contains("no moon hypothesis") || no_a.moon_k == 0.0);
+
+    let unstable = MoonHypothesis {
+        ms_earth: 0.3,
+        d_hill: DMAX_PROGRADE + 0.2,
+        sense: MoonSense::Prograde,
+    };
+    let far = luna_style_flags(k10, &geom, &prior, Some(&unstable), k10.a_au);
+    assert!(!far.d_inside_dmax);
+    assert!(far.method.contains("Not a LUNA integrator"));
+
+    assert!(extra_dip_possible(0.2, 0.5, 0.01));
+    assert!(
+        extra_dip_possible(0.2, 0.5, 0.02),
+        "wide moon can still graze the star"
+    );
+    assert!(
+        !extra_dip_possible(1.8, 0.2, 0.02),
+        "high-b planet + tight moon misses the star"
+    );
+    assert!(!extra_dip_possible(2.5, 0.1, 0.01));
+    let t_syz = syzygy_timescale_hours(0.1, 10.0);
+    assert!(t_syz > 0.0);
+    assert!((t_syz - 0.1 * 10.0 * 24.0 / (2.0 * std::f64::consts::PI)).abs() < 1e-12);
+    assert_eq!(syzygy_timescale_hours(0.0, 10.0), 0.0);
+    assert_eq!(syzygy_timescale_hours(0.1, 0.0), 0.0);
+
+    let retro_ok = MoonHypothesis {
+        ms_earth: 0.3,
+        d_hill: DMAX_RETROGRADE,
+        sense: MoonSense::Retrograde,
+    };
+    let retro = luna_style_flags(k10, &geom, &prior, Some(&retro_ok), k10.a_au);
+    assert!(retro.d_inside_dmax);
+    let retro_far = MoonHypothesis {
+        ms_earth: 0.3,
+        d_hill: DMAX_RETROGRADE + 0.05,
+        sense: MoonSense::Retrograde,
+    };
+    let retro_out = luna_style_flags(k10, &geom, &prior, Some(&retro_far), k10.a_au);
+    assert!(!retro_out.d_inside_dmax);
+
+    let high_b = CatalogPlanet {
+        id: "geom-high-b".into(),
+        name: "geom-high-b".into(),
+        source: CatalogSource::KoiCumulative,
+        period_days: 10.0,
+        rp_earth: Some(2.0),
+        mp_earth: Some(10.0),
+        mp_is_upper_limit: false,
+        a_au: Some(0.09),
+        impact_b: Some(1.8),
+        duration_hr: Some(4.0),
+        depth_ppm: Some(400.0),
+        incl_deg: Some(86.0),
+        rstar_rsun: Some(1.0),
+        mstar_msun: Some(1.0),
+        teff_k: Some(5700.0),
+        disposition: Some("CONFIRMED".into()),
+        kepid: None,
+        epoch_bkjd: None,
+    };
+    let tight = MoonHypothesis {
+        ms_earth: 0.1,
+        d_hill: 0.05,
+        sense: MoonSense::Prograde,
+    };
+    let miss = luna_style_flags(
+        &high_b,
+        &geometry_for(&high_b),
+        &exo_planets::features::prior_for(&high_b),
+        Some(&tight),
+        high_b.a_au,
+    );
+    assert!(miss.overlapping_disc_possible);
+    assert!(miss.moon_can_miss_star);
+    assert!(!miss.extra_dip_on_star_possible);
+    assert!(
+        !miss.syzygy_in_transit_possible,
+        "syzygy needs the moon able to sit on the star"
+    );
+    assert!(miss.method.contains("Not a LUNA integrator"));
 }
 
 #[test]

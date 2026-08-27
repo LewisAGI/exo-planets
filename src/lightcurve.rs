@@ -48,6 +48,18 @@ pub fn cached_specs() -> Vec<LightCurveSpec> {
             extract_mid_points: None,
         },
         LightCurveSpec {
+            name: "Kepler-11 b",
+            target_id: 6_541_920,
+            id_kind: "KIC",
+            mission: "Kepler",
+            cadence: "long",
+            cache_csv: "lightcurves/kepler11b_kic6541920_q1_llc.csv",
+            source_url: "https://archive.stsci.edu/pub/kepler/lightcurves/0065/006541920/kplr006541920-2009166043257_llc.fits",
+            note: "Q1 LLC. Confirmed planet. Not a moon host in this crate.",
+            time_offset_days: 0.0,
+            extract_mid_points: None,
+        },
+        LightCurveSpec {
             name: "Kepler-22 b",
             target_id: 10_593_626,
             id_kind: "KIC",
