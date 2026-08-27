@@ -1,0 +1,17 @@
+name: ci
+
+on:
+  push:
+    branches: [main, "cursor/**"]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - name: cargo test
+        run: cargo test --locked --all
+      - name: CLI train+score on cached TAP slice
+        run: cargo run --locked -- all --cache data/cache --out data/out

@@ -1,0 +1,311 @@
+//! NASA Exoplanet Archive TAP ingest (public HTTP, no secrets).
+//!
+//! Primary tables: `cumulative` (KOI) and `ps` (Planetary Systems).
+//! A small cached slice lives in `data/cache/`. `fetch` re-pulls the same
+//! queries. Empty archive fields stay empty — we do not invent fills.
+
+use crate::error::{ExoError, Result};
+use crate::labels::is_holdout_host;
+use serde::{Deserialize, Serialize};
+use std::collections::HashMap;
+use std::fs::{self, File};
+use std::io::{BufReader, Write};
+use std::path::{Path, PathBuf};
+
+pub const TAP_SYNC: &str = "https://exoplanetarchive.ipac.caltech.edu/TAP/sync";
+
+pub const Q_KOI_CONFIRMED_GEOMETRY: &str = "SELECT TOP 60 kepoi_name,kepid,kepler_name,koi_disposition,koi_pdisposition,koi_score,koi_period,koi_time0bk,koi_impact,koi_duration,koi_depth,koi_prad,koi_sma,koi_incl,koi_steff,koi_slogg,koi_srad,koi_smass FROM cumulative WHERE koi_disposition='CONFIRMED' AND koi_period IS NOT NULL AND koi_prad IS NOT NULL AND koi_impact IS NOT NULL AND koi_duration IS NOT NULL AND koi_depth IS NOT NULL AND koi_srad IS NOT NULL AND koi_smass IS NOT NULL AND koi_sma IS NOT NULL ORDER BY koi_period";
+
+pub const Q_KOI_LONG_PERIOD: &str = "SELECT TOP 25 kepoi_name,kepid,kepler_name,koi_disposition,koi_pdisposition,koi_score,koi_period,koi_time0bk,koi_impact,koi_duration,koi_depth,koi_prad,koi_sma,koi_incl,koi_steff,koi_slogg,koi_srad,koi_smass FROM cumulative WHERE koi_disposition='CONFIRMED' AND koi_period>100 AND koi_period IS NOT NULL AND koi_prad IS NOT NULL AND koi_impact IS NOT NULL AND koi_duration IS NOT NULL AND koi_depth IS NOT NULL AND koi_srad IS NOT NULL AND koi_smass IS NOT NULL AND koi_sma IS NOT NULL ORDER BY koi_period";
+
+pub const Q_KOI_NAMED: &str = "SELECT kepoi_name,kepid,kepler_name,koi_disposition,koi_pdisposition,koi_score,koi_period,koi_time0bk,koi_impact,koi_duration,koi_depth,koi_prad,koi_sma,koi_incl,koi_steff,koi_slogg,koi_srad,koi_smass FROM cumulative WHERE kepler_name IN ('Kepler-1625 b','Kepler-1708 b','Kepler-90 g','Kepler-167 e','Kepler-22 b','Kepler-10 b')";
+
+pub const Q_PS_KEPLER_SAMPLE: &str = "SELECT TOP 80 pl_name,hostname,pl_letter,sy_pnum,discoverymethod,disc_year,disc_facility,pl_orbper,pl_orbsmax,pl_rade,pl_radj,pl_bmasse,pl_bmassj,pl_orbeccen,pl_orbincl,pl_imppar,pl_trandep,pl_trandur,st_teff,st_rad,st_mass,default_flag,tran_flag FROM ps WHERE default_flag=1 AND tran_flag=1 AND disc_facility LIKE '%Kepler%' AND pl_orbper IS NOT NULL AND pl_rade IS NOT NULL AND st_rad IS NOT NULL AND st_mass IS NOT NULL ORDER BY pl_orbper";
+
+pub const Q_PS_NAMED: &str = "SELECT pl_name,hostname,pl_letter,sy_pnum,discoverymethod,disc_year,disc_facility,pl_orbper,pl_orbsmax,pl_rade,pl_radj,pl_bmasse,pl_bmassj,pl_bmasselim,pl_orbeccen,pl_orbincl,pl_imppar,pl_trandep,pl_trandur,st_teff,st_rad,st_mass,default_flag,tran_flag FROM ps WHERE default_flag=1 AND pl_name IN ('Kepler-1625 b','Kepler-1708 b','Kepler-90 g','Kepler-167 e','Kepler-22 b','Kepler-10 b','Kepler-11 b','Kepler-16 b','Kepler-51 d','Kepler-79 d','Kepler-9 b','Kepler-9 c')";
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
+pub enum CatalogSource {
+    KoiCumulative,
+    PlanetarySystems,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct CatalogPlanet {
+    pub id: String,
+    pub name: String,
+    pub source: CatalogSource,
+    pub period_days: f64,
+    pub rp_earth: Option<f64>,
+    pub mp_earth: Option<f64>,
+    pub mp_is_upper_limit: bool,
+    pub a_au: Option<f64>,
+    pub impact_b: Option<f64>,
+    pub duration_hr: Option<f64>,
+    pub depth_ppm: Option<f64>,
+    pub incl_deg: Option<f64>,
+    pub rstar_rsun: Option<f64>,
+    pub mstar_msun: Option<f64>,
+    pub teff_k: Option<f64>,
+    pub disposition: Option<String>,
+}
+
+impl CatalogPlanet {
+    pub fn is_holdout_host(&self) -> bool {
+        is_holdout_host(&self.name)
+    }
+}
+
+fn parse_f64(s: &str) -> Option<f64> {
+    let t = s.trim().trim_matches('"');
+    if t.is_empty() {
+        None
+    } else {
+        t.parse().ok()
+    }
+}
+
+fn parse_string(s: &str) -> String {
+    s.trim().trim_matches('"').to_string()
+}
+
+fn get<'a>(row: &'a HashMap<String, String>, key: &str) -> &'a str {
+    row.get(key).map(String::as_str).unwrap_or("")
+}
+
+fn read_csv_rows(path: &Path) -> Result<Vec<HashMap<String, String>>> {
+    let file = File::open(path)?;
+    let mut rdr = csv::ReaderBuilder::new()
+        .flexible(true)
+        .from_reader(BufReader::new(file));
+    let headers = rdr.headers()?.clone();
+    let mut out = Vec::new();
+    for rec in rdr.records() {
+        let rec = rec?;
+        let mut map = HashMap::new();
+        for (h, v) in headers.iter().zip(rec.iter()) {
+            map.insert(h.to_string(), v.to_string());
+        }
+        out.push(map);
+    }
+    Ok(out)
+}
+
+fn planet_from_koi(row: &HashMap<String, String>) -> Option<CatalogPlanet> {
+    let name = parse_string(get(row, "kepler_name"));
+    let id = parse_string(get(row, "kepoi_name"));
+    if id.is_empty() {
+        return None;
+    }
+    let period = parse_f64(get(row, "koi_period"))?;
+    let display = if name.is_empty() { id.clone() } else { name };
+    Some(CatalogPlanet {
+        id,
+        name: display,
+        source: CatalogSource::KoiCumulative,
+        period_days: period,
+        rp_earth: parse_f64(get(row, "koi_prad")),
+        mp_earth: None,
+        mp_is_upper_limit: false,
+        a_au: parse_f64(get(row, "koi_sma")),
+        impact_b: parse_f64(get(row, "koi_impact")),
+        duration_hr: parse_f64(get(row, "koi_duration")),
+        depth_ppm: parse_f64(get(row, "koi_depth")),
+        incl_deg: parse_f64(get(row, "koi_incl")),
+        rstar_rsun: parse_f64(get(row, "koi_srad")),
+        mstar_msun: parse_f64(get(row, "koi_smass")),
+        teff_k: parse_f64(get(row, "koi_steff")),
+        disposition: {
+            let d = parse_string(get(row, "koi_disposition"));
+            if d.is_empty() {
+                None
+            } else {
+                Some(d)
+            }
+        },
+    })
+}
+
+fn planet_from_ps(row: &HashMap<String, String>) -> Option<CatalogPlanet> {
+    let name = parse_string(get(row, "pl_name"));
+    if name.is_empty() {
+        return None;
+    }
+    let period = parse_f64(get(row, "pl_orbper"))?;
+    // PS transit depth is in percent (NASA TAP unit). Convert to ppm when present.
+    let depth_ppm = parse_f64(get(row, "pl_trandep")).map(|pct| pct * 1.0e4);
+    let lim = parse_f64(get(row, "pl_bmasselim")).unwrap_or(0.0);
+    Some(CatalogPlanet {
+        id: name.clone(),
+        name,
+        source: CatalogSource::PlanetarySystems,
+        period_days: period,
+        rp_earth: parse_f64(get(row, "pl_rade")),
+        mp_earth: parse_f64(get(row, "pl_bmasse")),
+        mp_is_upper_limit: lim > 0.0,
+        a_au: parse_f64(get(row, "pl_orbsmax")),
+        impact_b: parse_f64(get(row, "pl_imppar")),
+        duration_hr: parse_f64(get(row, "pl_trandur")),
+        depth_ppm,
+        incl_deg: parse_f64(get(row, "pl_orbincl")),
+        rstar_rsun: parse_f64(get(row, "st_rad")),
+        mstar_msun: parse_f64(get(row, "st_mass")),
+        teff_k: parse_f64(get(row, "st_teff")),
+        disposition: Some("PS_DEFAULT".into()),
+    })
+}
+
+fn merge_ps_onto_koi(koi: &mut CatalogPlanet, ps: &CatalogPlanet) {
+    if koi.mp_earth.is_none() {
+        koi.mp_earth = ps.mp_earth;
+        koi.mp_is_upper_limit = ps.mp_is_upper_limit;
+    }
+    if koi.a_au.is_none() {
+        koi.a_au = ps.a_au;
+    }
+    if koi.incl_deg.is_none() {
+        koi.incl_deg = ps.incl_deg;
+    }
+    if koi.impact_b.is_none() {
+        koi.impact_b = ps.impact_b;
+    }
+    if koi.duration_hr.is_none() {
+        koi.duration_hr = ps.duration_hr;
+    }
+}
+
+/// Load the in-repo cache. KOI geometry is the training backbone; PS overlays
+/// masses / limits for named systems. Holdout hosts stay in the catalog so
+/// score cards can be built; they are excluded from training later.
+pub fn load_cache(cache_dir: &Path) -> Result<Vec<CatalogPlanet>> {
+    let mut by_name: HashMap<String, CatalogPlanet> = HashMap::new();
+
+    for fname in [
+        "nasa_koi_confirmed_geometry_sample.csv",
+        "nasa_koi_long_period_sample.csv",
+        "nasa_koi_named_systems.csv",
+    ] {
+        let path = cache_dir.join(fname);
+        if !path.exists() {
+            return Err(ExoError::Parse(format!("missing cache file {fname}")));
+        }
+        for row in read_csv_rows(&path)? {
+            if let Some(p) = planet_from_koi(&row) {
+                by_name.entry(p.name.clone()).or_insert(p);
+            }
+        }
+    }
+
+    for fname in [
+        "nasa_ps_named_systems.csv",
+        "nasa_ps_kepler_transiting_sample.csv",
+    ] {
+        let path = cache_dir.join(fname);
+        if !path.exists() {
+            continue;
+        }
+        for row in read_csv_rows(&path)? {
+            if let Some(ps) = planet_from_ps(&row) {
+                if let Some(existing) = by_name.get_mut(&ps.name) {
+                    merge_ps_onto_koi(existing, &ps);
+                } else if ps.is_holdout_host() || fname.contains("named") {
+                    // Keep named / holdout PS rows even when KOI is missing
+                    // (Kepler-1708 b is not in the cumulative KOI pull).
+                    by_name.entry(ps.name.clone()).or_insert(ps);
+                }
+            }
+        }
+    }
+
+    let mut planets: Vec<CatalogPlanet> = by_name.into_values().collect();
+    planets.sort_by(|a, b| {
+        a.period_days
+            .partial_cmp(&b.period_days)
+            .unwrap_or(std::cmp::Ordering::Equal)
+            .then_with(|| a.name.cmp(&b.name))
+    });
+    Ok(planets)
+}
+
+pub fn tap_url(query: &str) -> String {
+    let encoded: String = urlencoding_lite(query);
+    format!("{TAP_SYNC}?query={encoded}&format=csv")
+}
+
+/// Minimal application/x-www-form-urlencoded encoder (no extra crate).
+fn urlencoding_lite(s: &str) -> String {
+    let mut out = String::new();
+    for b in s.bytes() {
+        match b {
+            b'A'..=b'Z' | b'a'..=b'z' | b'0'..=b'9' | b'-' | b'_' | b'.' | b'~' => {
+                out.push(b as char);
+            }
+            b' ' => out.push('+'),
+            _ => out.push_str(&format!("%{b:02X}")),
+        }
+    }
+    out
+}
+
+fn download(url: &str) -> Result<String> {
+    let resp = ureq::get(url)
+        .timeout(std::time::Duration::from_secs(90))
+        .call()
+        .map_err(|e| ExoError::Http(e.to_string()))?;
+    if resp.status() != 200 {
+        return Err(ExoError::Http(format!("HTTP {}", resp.status())));
+    }
+    resp.into_string()
+        .map_err(|e| ExoError::Http(e.to_string()))
+}
+
+pub struct FetchSpec {
+    pub filename: &'static str,
+    pub query: &'static str,
+}
+
+pub fn fetch_specs() -> Vec<FetchSpec> {
+    vec![
+        FetchSpec {
+            filename: "nasa_koi_confirmed_geometry_sample.csv",
+            query: Q_KOI_CONFIRMED_GEOMETRY,
+        },
+        FetchSpec {
+            filename: "nasa_koi_long_period_sample.csv",
+            query: Q_KOI_LONG_PERIOD,
+        },
+        FetchSpec {
+            filename: "nasa_koi_named_systems.csv",
+            query: Q_KOI_NAMED,
+        },
+        FetchSpec {
+            filename: "nasa_ps_kepler_transiting_sample.csv",
+            query: Q_PS_KEPLER_SAMPLE,
+        },
+        FetchSpec {
+            filename: "nasa_ps_named_systems.csv",
+            query: Q_PS_NAMED,
+        },
+    ]
+}
+
+pub fn fetch_cache(cache_dir: &Path) -> Result<Vec<PathBuf>> {
+    fs::create_dir_all(cache_dir)?;
+    let mut written = Vec::new();
+    for spec in fetch_specs() {
+        let url = tap_url(spec.query);
+        let body = download(&url)?;
+        if !body.contains(',') {
+            return Err(ExoError::Http(format!(
+                "TAP response for {} did not look like CSV",
+                spec.filename
+            )));
+        }
+        let path = cache_dir.join(spec.filename);
+        let mut f = File::create(&path)?;
+        f.write_all(body.as_bytes())?;
+        written.push(path);
+    }
+    Ok(written)
+}

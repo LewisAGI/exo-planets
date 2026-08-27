@@ -1,1 +1,118 @@
 # exo-planets
+
+Rust crate for **Kipping transit / TTV / TDV signatures** on a **public NASA
+Exoplanet Archive TAP slice**, plus a small **linfa** logistic model.
+
+This is **not** a moon-discovery paper, not LUNA, and not a confirmation engine.
+
+Science lock (2026-08-27, opened papers only). Cool Worlds videos are not
+results. HEK II–V are **all null**. Named objects stay
+**candidate / false positive / search**.
+
+## What this is
+
+1. **Ingest** of a cached NASA TAP/CSV sample (KOI `cumulative` + PS `ps`).
+2. **Feature layer**: transit geometry (Kipping 2009b / Seager & Mallén-Ornelas),
+   circular TTV (Kipping 2009a), TDV-V / first-order TDV-TIP, HEK-style
+   dynamical cuts and a **timing Bayes-factor proxy**, FORECASTER mass-prior
+   *class* (Chen & Kipping 2017) labelled **extrapolation** when discretized
+   from radius.
+3. **Trainable model in Rust** (`linfa-logistic`). Train/eval on confirmed KOIs
+   as planet-only + **injected** TTV/TDV moons. The four locked systems are
+   **holdout score cards only**.
+
+## What this is not
+
+- Not LUNA photodynamics (no 3-body overlapping-disc integrator).
+- Not a HEK Bayes factor. The “BF” number is a timing-RMS χ² / BIC **proxy**.
+- Not official FORECASTER posterior draws. Radius bins are a discretization.
+- Not a published TTV catalog. Planet-only timing is **synthetic white noise**.
+- Not a confirmation of Kepler-1625b-i, Kepler-1708 b-i, or a Kepler-167e moon.
+- Kepler-90g’s moon is a **false positive** (SPSD / pixel-centroid) no matter
+  what the classifier outputs.
+
+## Why linfa (not candle / burn)
+
+The labels are a few hundred **tabular** rows: real KOI/PS parameters plus
+analytic TTV/TDV injections. A regularized logistic regression is the honest
+capacity. A neural net (candle/burn) would overfit the injections and look
+like a photodynamical detector we did not build.
+
+## Fetch / train / score
+
+Needs Rust 1.74+ (`rustc` 1.83 is fine). No API keys.
+
+```bash
+# offline: use the in-repo TAP slice
+cargo test
+cargo run -- all --cache data/cache --out data/out
+
+# optional: re-pull the same TAP queries (public HTTP)
+cargo run -- fetch --cache data/cache
+```
+
+`data/out/report.json` and `data/out/holdout_scorecards.json` are the human
+artifacts. `data/out/` is gitignored.
+
+Cache provenance and the exact TAP SQL: [`data/cache/SOURCE.md`](data/cache/SOURCE.md).
+
+Locked statuses: [`data/labels/holdout_scorecards.json`](data/labels/holdout_scorecards.json).
+
+## Feature math (implemented)
+
+| Piece | Formula / cut | Honesty note |
+|---|---|---|
+| Depth | δ ≈ (R_p / R_*)² | No limb darkening |
+| Impact | b = a cos i / R_* | Uses catalog b when present |
+| Chord T₁₄ | Seager & Mallén-Ornelas circular | Missing a → Kepler III, flagged |
+| TTV RMS | δTTV = a_W / (√2 v_{B⊥}) | Circular, coplanar |
+| HEK I max-dev | 36.0 D (M_S/M⊕) (P_B/yr) (M_J/M_P)^{2/3} (M_☉/M_*)^{1/3} min | Scale, not a detection |
+| Moon period | P_S = P_B √(D³/3) so P_S(D=1) = P_B/√3 | See note below |
+| Unique P_S | P_S ≲ 0.6 P_P | Else TTV aliases harmonics |
+| TDV-V | ∝ M_S a_S^{-1/2}; η_V = 2π T / P_S | π/2 out of phase with TTV |
+| TDV-TIP | first-order \|dT/db\| (a_W/R_*)/√2 | Additive prograde, subtractive retrograde. **Not LUNA.** |
+| D_max | 0.4895 prograde, 0.9309 retrograde | Domingos 2006 |
+| HEK I 4σ | z = δTTV / σ_timing | Proxy threshold |
+| HEK V | photometry-only caution | Would have false-claimed ~1/4 of KOIs |
+| HEK VI | η < 0.38 (95%), 284 KOIs | A **dearth**, not a detection. BF~2 is a hint. |
+| FORECASTER | Terran / Neptunian / Jovian / stellar; 2.0^{+0.7}_{-0.6} M⊕ | Prior class only |
+
+The lock text writes `P_SB = P_B / √(D³/3)`. That is the **reciprocal** of the
+Kepler+Hill period. This crate evaluates `P_S = P_B √(D³/3)` and the cut
+`P_S ≤ P_B/√3` (then Domingos D_max).
+
+Kepler long-cadence (29.4 min) smears ingress; the `long_cadence_smear` flag
+is on when predicted ingress ≲ 2 LC samples. Prefer short cadence for TDV.
+
+Large-moon injections sit at ≥ 0.1 M⊕ (HEK scale), D = 0.25 and 0.40
+(prograde, inside D_max).
+
+## Named objects (holdouts)
+
+| Object | Status | Locked note |
+|---|---|---|
+| Kepler-1625b-i | **CANDIDATE** | Hubble dip model-dependent; authors call unconfirmed. No TTV invented. |
+| Kepler-1708 b-i | **CANDIDATE** | Planet validated; moon not. Two Kepler transits. Predicted TTV 1.2–77 min (95%). Archive `pl_bmasse` is an **upper limit**. |
+| Kepler-90g moon | **FALSE POSITIVE** | SPSD / pixel-centroid. |
+| JWST Kepler-167e (GO 6491) | **SEARCH** | Residual 7–17 min after linear ephemeris. Do not promote a moon. |
+
+They are never trained as confirmed moons. The classifier’s
+`P(injected-like)` on a score card is **not** a posterior that a moon exists.
+
+## Honest limits
+
+- Training “planet_only” rows are confirmed **planets**, not confirmed
+  moon-nulls. HEK II–V already published those nulls; we do not re-litigate
+  them as detections.
+- Injected moons are synthetic and labelled `injected`.
+- No MAST light curves, no Hubble or JWST time series, no Columbia 1625
+  photometry products are ingested — only TAP planet/KOI parameters plus
+  the locked published timing *ranges* on the score cards.
+- Kepler-90 g has no `default_flag=1` PS row in the 2026-08-27 TAP pull;
+  geometry comes from KOI cumulative.
+- Kepler-1708 b is missing from the KOI cumulative pull; it comes from PS.
+- A download failure should leave this cache in place rather than invent rows.
+
+## License
+
+MIT.
