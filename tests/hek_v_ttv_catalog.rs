@@ -173,8 +173,10 @@ fn hek_v_demo_is_a_caution_not_a_detection() {
             || r.planet_name == "Kepler-149 c"
             || r.planet_name == "Kepler-149 d"
             || r.planet_name == "Kepler-154 c"
-            || r.planet_name == "Kepler-155 c"),
-        "30 c / 51 c/d / 62 b / 62 f / 68 b / 80 b / 186 f / 82 c / 90 f / 103 c / 104 d / 139 c / 140 c / 146 c / 148 d / 149 c/d / 154 c / 155 c catalog epochs miss Q1; do not invent a window"
+            || r.planet_name == "Kepler-155 c"
+            || r.planet_name == "Kepler-164 e"
+            || r.planet_name == "Kepler-169 f"),
+        "30 c / 51 c/d / 62 b / 62 f / 68 b / 80 b / 186 f / 82 c / 90 f / 103 c / 104 d / 139 c / 140 c / 146 c / 148 d / 149 c/d / 154 c / 155 c / 164 e / 169 f catalog epochs miss Q1; do not invent a window"
     );
     for name in ["K2-3 b", "K2-3 c"] {
         let k2 = demo
@@ -208,7 +210,7 @@ fn k2_hosts_are_planets_not_moons() {
 #[test]
 fn cached_lc_count_and_tess_extract_size() {
     let lcs = load_lightcurves(Path::new("data/cache")).unwrap();
-    assert_eq!(n_cached_lightcurves(&lcs), 299);
+    assert_eq!(n_cached_lightcurves(&lcs), 324);
     let tess = lcs
         .get("Kepler-10 b")
         .unwrap()
@@ -544,6 +546,31 @@ fn hek_v_kepler22_is_windowed_catalog_transit() {
         "Kepler-159 c",
         "Kepler-160 b",
         "Kepler-160 c",
+        "Kepler-161 b",
+        "Kepler-161 c",
+        "Kepler-162 b",
+        "Kepler-162 c",
+        "Kepler-163 b",
+        "Kepler-163 c",
+        "Kepler-164 b",
+        "Kepler-164 c",
+        "Kepler-164 d",
+        "Kepler-165 b",
+        "Kepler-165 c",
+        "Kepler-166 b",
+        "Kepler-166 c",
+        "Kepler-166 d",
+        "Kepler-167 b",
+        "Kepler-167 c",
+        "Kepler-167 d",
+        "Kepler-168 b",
+        "Kepler-168 c",
+        "Kepler-169 b",
+        "Kepler-169 c",
+        "Kepler-169 d",
+        "Kepler-169 e",
+        "Kepler-170 b",
+        "Kepler-170 c",
     ] {
         let row = demo
             .per_lc
