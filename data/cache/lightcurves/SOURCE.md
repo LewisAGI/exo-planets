@@ -21,6 +21,7 @@ TESS TIME is BTJD (BJD−2457000). Cached TESS times are shifted to BKJD
 | `kepler1b_kic11446443_q1_llc.csv` | Kepler-1 b (TrES-2b) | KIC 11446443 | Q1 LLC | https://archive.stsci.edu/pub/kepler/lightcurves/0114/011446443/kplr011446443-2009166043257_llc.fits |
 | `kepler11b_kic6541920_q1_llc.csv` | Kepler-11 b | KIC 6541920 | Q1 LLC | https://archive.stsci.edu/pub/kepler/lightcurves/0065/006541920/kplr006541920-2009166043257_llc.fits |
 | `kepler2b_kic10666592_q1_llc.csv` | Kepler-2 b (HAT-P-7b) | KIC 10666592 | Q1 LLC | https://archive.stsci.edu/pub/kepler/lightcurves/0106/010666592/kplr010666592-2009166043257_llc.fits |
+| `kepler3b_kic10748390_q1_llc.csv` | Kepler-3 b (HAT-P-11b) | KIC 10748390 | Q1 LLC | https://archive.stsci.edu/pub/kepler/lightcurves/0107/010748390/kplr010748390-2009166043257_llc.fits |
 | `kepler4b_kic11853905_q1_llc.csv` | Kepler-4 b | KIC 11853905 | Q1 LLC | https://archive.stsci.edu/pub/kepler/lightcurves/0118/011853905/kplr011853905-2009166043257_llc.fits |
 | `kepler5b_kic8191672_q1_llc.csv` | Kepler-5 b | KIC 8191672 | Q1 LLC | https://archive.stsci.edu/pub/kepler/lightcurves/0081/008191672/kplr008191672-2009166043257_llc.fits |
 | `kepler6b_kic10874614_q1_llc.csv` | Kepler-6 b | KIC 10874614 | Q1 LLC | https://archive.stsci.edu/pub/kepler/lightcurves/0108/010874614/kplr010874614-2009166043257_llc.fits |
@@ -28,6 +29,8 @@ TESS TIME is BTJD (BJD−2457000). Cached TESS times are shifted to BKJD
 | `kepler8b_kic6922244_q1_llc.csv` | Kepler-8 b | KIC 6922244 | Q1 LLC | https://archive.stsci.edu/pub/kepler/lightcurves/0069/006922244/kplr006922244-2009166043257_llc.fits |
 | `kepler9b_kic3323887_q1_llc.csv` | Kepler-9 b | KIC 3323887 | Q1 LLC | https://archive.stsci.edu/pub/kepler/lightcurves/0033/003323887/kplr003323887-2009166043257_llc.fits |
 | `kepler22b_kic10593626_q1_llc.csv` | Kepler-22 b | KIC 10593626 | Q1 LLC | https://archive.stsci.edu/pub/kepler/lightcurves/0105/010593626/kplr010593626-2009166043257_llc.fits |
+| `kepler18b_kic8644288_q1_llc.csv` | Kepler-18 b | KIC 8644288 | Q1 LLC | https://archive.stsci.edu/pub/kepler/lightcurves/0086/008644288/kplr008644288-2009166043257_llc.fits |
+| `kepler19b_kic2571238_q1_llc.csv` | Kepler-19 b | KIC 2571238 | Q1 LLC | https://archive.stsci.edu/pub/kepler/lightcurves/0025/002571238/kplr002571238-2009166043257_llc.fits |
 | `k2_3_epic201367065_c01_llc.csv` | K2-3 b | EPIC 201367065 | K2 C1 LLC | https://archive.stsci.edu/pub/k2/lightcurves/c1/201300000/67000/ktwo201367065-c01_llc.fits |
 | `k2_18_epic201912552_c01_llc.csv` | K2-18 b | EPIC 201912552 | K2 C1 LLC | https://archive.stsci.edu/pub/k2/lightcurves/c1/201900000/12000/ktwo201912552-c01_llc.fits |
 | `kepler1625b_kic4760478_q8_llc.csv` | Kepler-1625 b | KIC 4760478 | Q8 LLC | https://archive.stsci.edu/pub/kepler/lightcurves/0047/004760478/kplr004760478-2011073133259_llc.fits |
@@ -39,9 +42,11 @@ TESS FITS uses `QUALITY` (not `SAP_QUALITY`); the extract header stays the same.
 
 Honesty:
 
-- Kepler-10 b, Kepler-1 b, Kepler-2 b, Kepler-4–8 b, Kepler-9 b/c,
-  Kepler-11 b/c/d, Kepler-22 b, K2-3 b, and K2-18 b are **confirmed
-  planets**, used as LC-backed training hosts. They are not moon detections.
+- Kepler-10 b, Kepler-1 b, Kepler-2 b, Kepler-3 b, Kepler-4–8 b, Kepler-9 b/c,
+  Kepler-11 b/c/d/e, Kepler-18 b, Kepler-19 b, Kepler-22 b, K2-3 b/c, and
+  K2-18 b are **confirmed planets**, used as LC-backed training hosts. They
+  are not moon detections. Kepler-12 b’s prior catalog epoch (≈166.57)
+  misses Q1; no extract was invented.
   Kepler-22 b Q1 covers the catalog epoch (t0≈133.70 BKJD); Kepler-11 b/c/d/e
   cover catalog t0≈138.50 / 138.18 / 148.46 / 154.16; Kepler-9 b/c cover
   previous catalog epochs (≈163.27 / ≈136.52). Those transits were not

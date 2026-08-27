@@ -145,6 +145,10 @@ fn hek_v_demo_is_a_caution_not_a_detection() {
             .any(|r| r.planet_name == "Kepler-11 f" || r.planet_name == "Kepler-11 g"),
         "11 f/g catalog epochs miss Q1; do not invent a window"
     );
+    assert!(
+        !demo.per_lc.iter().any(|r| r.planet_name == "Kepler-12 b"),
+        "Kepler-12 b prior catalog epoch ≈166.57 misses Q1; no LC invented"
+    );
     for name in ["K2-3 b", "K2-3 c"] {
         let k2 = demo
             .per_lc
@@ -177,7 +181,7 @@ fn k2_hosts_are_planets_not_moons() {
 #[test]
 fn cached_lc_count_and_tess_extract_size() {
     let lcs = load_lightcurves(Path::new("data/cache")).unwrap();
-    assert_eq!(n_cached_lightcurves(&lcs), 22);
+    assert_eq!(n_cached_lightcurves(&lcs), 25);
     let tess = lcs
         .get("Kepler-10 b")
         .unwrap()
@@ -236,6 +240,9 @@ fn hek_v_kepler22_is_windowed_catalog_transit() {
         "Kepler-11 c",
         "Kepler-11 d",
         "Kepler-11 e",
+        "Kepler-3 b",
+        "Kepler-18 b",
+        "Kepler-19 b",
     ] {
         let row = demo
             .per_lc

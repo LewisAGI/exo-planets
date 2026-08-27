@@ -27,13 +27,14 @@ fn cached_lcs_are_real_pdcsap_kepler_k2_tess() {
     let dir = Path::new("data/cache");
     let lcs = load_lightcurves(dir).unwrap();
     assert!(
-        n_cached_lightcurves(&lcs) >= 22,
+        n_cached_lightcurves(&lcs) >= 25,
         "expected Kepler-10 (2), Kepler-1/2/4–9/11/22 + siblings, 1625, 1708, 167, K2-3, K2-18"
     );
     for name in [
         "Kepler-10 b",
         "Kepler-1 b",
         "Kepler-2 b",
+        "Kepler-3 b",
         "Kepler-4 b",
         "Kepler-5 b",
         "Kepler-6 b",
@@ -45,6 +46,8 @@ fn cached_lcs_are_real_pdcsap_kepler_k2_tess() {
         "Kepler-11 c",
         "Kepler-11 d",
         "Kepler-11 e",
+        "Kepler-18 b",
+        "Kepler-19 b",
         "Kepler-22 b",
         "Kepler-1625 b",
         "Kepler-1708 b",
@@ -186,6 +189,9 @@ fn extra_dip_flag_is_not_a_moon_and_hek_v_fraction_locked() {
         "Kepler-11 c",
         "Kepler-11 d",
         "Kepler-11 e",
+        "Kepler-3 b",
+        "Kepler-18 b",
+        "Kepler-19 b",
     ] {
         let p = planets.iter().find(|pl| pl.name == name).unwrap();
         assert!(p.epoch_bkjd.is_some(), "{name} catalog epoch");
@@ -313,6 +319,20 @@ fn luna_style_flags_are_geometric_not_an_integrator() {
         "syzygy needs the moon able to sit on the star"
     );
     assert!(miss.method.contains("Not a LUNA integrator"));
+
+    let mut no_rstar = k10.clone();
+    no_rstar.rstar_rsun = None;
+    let blank = luna_style_flags(&no_rstar, &geom, &prior, Some(&hypo), k10.a_au);
+    assert!(!blank.overlapping_disc_possible);
+    assert!(!blank.syzygy_in_transit_possible);
+    assert_eq!(blank.syzygy_timescale_hr, 0.0);
+    assert!(blank.method.contains("no moon hypothesis"));
+
+    let mut no_mstar = k10.clone();
+    no_mstar.mstar_msun = None;
+    let blank_m = luna_style_flags(&no_mstar, &geom, &prior, Some(&hypo), k10.a_au);
+    assert!(!blank_m.overlapping_disc_possible);
+    assert!(blank_m.method.contains("no moon hypothesis"));
 }
 
 #[test]
