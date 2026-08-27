@@ -138,6 +138,13 @@ fn hek_v_demo_is_a_caution_not_a_detection() {
     );
     assert!(k11.n_in_transit > 0);
     assert!(!demo.per_lc.iter().any(|r| r.planet_name == "Kepler-90 g"));
+    assert!(
+        !demo
+            .per_lc
+            .iter()
+            .any(|r| r.planet_name == "Kepler-11 f" || r.planet_name == "Kepler-11 g"),
+        "11 f/g catalog epochs miss Q1; do not invent a window"
+    );
     for name in ["K2-3 b", "K2-3 c"] {
         let k2 = demo
             .per_lc
