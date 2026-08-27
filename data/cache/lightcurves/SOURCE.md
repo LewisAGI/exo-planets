@@ -99,6 +99,12 @@ TESS TIME is BTJD (BJD−2457000). Cached TESS times are shifted to BKJD
 | `kepler97b_kic11075737_q1_llc.csv` | Kepler-97 b | KIC 11075737 | Q1 LLC | https://archive.stsci.edu/pub/kepler/lightcurves/0110/011075737/kplr011075737-2009166043257_llc.fits |
 | `kepler98b_kic2692377_q1_llc.csv` | Kepler-98 b | KIC 2692377 | Q1 LLC | https://archive.stsci.edu/pub/kepler/lightcurves/0026/002692377/kplr002692377-2009166043257_llc.fits |
 | `kepler99b_kic6063220_q1_llc.csv` | Kepler-99 b | KIC 6063220 | Q1 LLC | https://archive.stsci.edu/pub/kepler/lightcurves/0060/006063220/kplr006063220-2009166043257_llc.fits |
+| `kepler101b_kic10905239_q1_llc.csv` | Kepler-101 b/c | KIC 10905239 | Q1 LLC | https://archive.stsci.edu/pub/kepler/lightcurves/0109/010905239/kplr010905239-2009166043257_llc.fits |
+| `kepler103b_kic4914423_q1_llc.csv` | Kepler-103 b | KIC 4914423 | Q1 LLC | https://archive.stsci.edu/pub/kepler/lightcurves/0049/004914423/kplr004914423-2009166043257_llc.fits |
+| `kepler104b_kic6678383_q1_llc.csv` | Kepler-104 b/c | KIC 6678383 | Q1 LLC | https://archive.stsci.edu/pub/kepler/lightcurves/0066/006678383/kplr006678383-2009166043257_llc.fits |
+| `kepler105b_kic9579641_q1_llc.csv` | Kepler-105 b/c | KIC 9579641 | Q1 LLC | https://archive.stsci.edu/pub/kepler/lightcurves/0095/009579641/kplr009579641-2009166043257_llc.fits |
+| `kepler106b_kic8395660_q1_llc.csv` | Kepler-106 b–e | KIC 8395660 | Q1 LLC | https://archive.stsci.edu/pub/kepler/lightcurves/0083/008395660/kplr008395660-2009166043257_llc.fits |
+| `kepler107b_kic10875245_q1_llc.csv` | Kepler-107 b–e | KIC 10875245 | Q1 LLC | https://archive.stsci.edu/pub/kepler/lightcurves/0108/010875245/kplr010875245-2009166043257_llc.fits |
 | `k2_3_epic201367065_c01_llc.csv` | K2-3 b | EPIC 201367065 | K2 C1 LLC | https://archive.stsci.edu/pub/k2/lightcurves/c1/201300000/67000/ktwo201367065-c01_llc.fits |
 | `k2_18_epic201912552_c01_llc.csv` | K2-18 b | EPIC 201912552 | K2 C1 LLC | https://archive.stsci.edu/pub/k2/lightcurves/c1/201900000/12000/ktwo201912552-c01_llc.fits |
 | `kepler1625b_kic4760478_q8_llc.csv` | Kepler-1625 b | KIC 4760478 | Q8 LLC | https://archive.stsci.edu/pub/kepler/lightcurves/0047/004760478/kplr004760478-2011073133259_llc.fits |
@@ -124,12 +130,13 @@ Honesty:
   Kepler-51 b, Kepler-62 c/d/e, Kepler-65 b/c/d, Kepler-68 c, Kepler-79 b–e,
   Kepler-80 c–f, Kepler-81 b/c/d, Kepler-88 b, Kepler-89 b–e, Kepler-92 b/c/d, Kepler-93 b,
   Kepler-91 b, Kepler-94 b, Kepler-95 b, Kepler-96 b, Kepler-97 b, Kepler-98 b,
-  Kepler-99 b, Kepler-100 b/c/d,
+  Kepler-99 b, Kepler-100 b/c/d, Kepler-101 b/c, Kepler-103 b, Kepler-104 b/c,
+  Kepler-105 b/c, Kepler-106 b–e, Kepler-107 b–e,
   Kepler-102 b–f, Kepler-138 b/c/d, Kepler-186 b–e, Kepler-444 b–f, Kepler-22 b,
   K2-3 b/c, and K2-18 b are
   **confirmed planets**, used as LC-backed training hosts. They are not
   moon detections. Kepler-12 b, 25 b, 30 c, 51 c/d, 62 b, 62 f, 68 b, 80 b,
-  82 c, and 186 f miss Q1; no extracts were invented. Kepler-67 b has a catalog
+  82 c, 103 c, 104 d, and 186 f miss Q1; no extracts were invented. Kepler-67 b has a catalog
   epoch in Q1, but the public Q1 LLC path 404'd; no extract was invented. Kepler-20 c–f reuse the Kepler-20 b
   Q1 file; Kepler-30 d reuses Kepler-30 b; Kepler-36 c reuses Kepler-36 b;
   Kepler-37 c/d reuse Kepler-37 b; Kepler-48 c/d reuse Kepler-48 b;
@@ -151,7 +158,9 @@ Honesty:
   Kepler-31 c reuses Kepler-31 b; Kepler-50 c reuses Kepler-50 b;
   Kepler-81 c/d reuse Kepler-81 b; Kepler-92 c/d reuse Kepler-92 b;
   Kepler-49 c reuses Kepler-49 b; Kepler-83 c/d reuse Kepler-83 b;
-  Kepler-82 d/e reuse Kepler-82 b.
+  Kepler-82 d/e reuse Kepler-82 b; Kepler-101 c reuses Kepler-101 b;
+  Kepler-104 c reuses Kepler-104 b; Kepler-105 c reuses Kepler-105 b;
+  Kepler-106 c–e reuse Kepler-106 b; Kepler-107 c–e reuse Kepler-107 b.
   Kepler-22 b Q1 covers the catalog epoch (t0≈133.70 BKJD); Kepler-11 b/c/d/e
   cover catalog t0≈138.50 / 138.18 / 148.46 / 154.16; Kepler-9 b/c cover
   previous catalog epochs (≈163.27 / ≈136.52); Kepler-37 b/c/d cover
@@ -172,7 +181,7 @@ Honesty:
   Kepler-42 b, Kepler-32 b/c, Kepler-26 b, Kepler-28 b/c, Kepler-29 b/c,
   Kepler-39 b, Kepler-40 b, Kepler-45 b, Kepler-49 b, Kepler-50 b, Kepler-52 b, Kepler-55 d, Kepler-63 b, Kepler-75 b,
   Kepler-81 b/c, Kepler-82 b, Kepler-83 b/d, Kepler-92 b, Kepler-97 b,
-  Kepler-98 b, Kepler-99 b, and Kepler-186 c use folded catalog transits. Those transits were not
+  Kepler-98 b, Kepler-99 b, Kepler-101 b, and Kepler-186 c use folded catalog transits. Those transits were not
   invented. Kepler-11 c/d/e and Kepler-9 c reuse the host-star Q1 extract.
   Kepler-11 f/g catalog epochs do not fall in Q1; no transit was invented.
 - Kepler-1625 b, Kepler-1708 b, and Kepler-167 e are **holdouts**.

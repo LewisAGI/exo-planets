@@ -162,8 +162,10 @@ fn hek_v_demo_is_a_caution_not_a_detection() {
             || r.planet_name == "Kepler-68 b"
             || r.planet_name == "Kepler-62 f"
             || r.planet_name == "Kepler-186 f"
-            || r.planet_name == "Kepler-82 c"),
-        "30 c / 51 c/d / 62 b / 62 f / 68 b / 80 b / 186 f / 82 c catalog epochs miss Q1; do not invent a window"
+            || r.planet_name == "Kepler-82 c"
+            || r.planet_name == "Kepler-103 c"
+            || r.planet_name == "Kepler-104 d"),
+        "30 c / 51 c/d / 62 b / 62 f / 68 b / 80 b / 186 f / 82 c / 103 c / 104 d catalog epochs miss Q1; do not invent a window"
     );
     for name in ["K2-3 b", "K2-3 c"] {
         let k2 = demo
@@ -197,7 +199,7 @@ fn k2_hosts_are_planets_not_moons() {
 #[test]
 fn cached_lc_count_and_tess_extract_size() {
     let lcs = load_lightcurves(Path::new("data/cache")).unwrap();
-    assert_eq!(n_cached_lightcurves(&lcs), 182);
+    assert_eq!(n_cached_lightcurves(&lcs), 197);
     let tess = lcs
         .get("Kepler-10 b")
         .unwrap()
@@ -416,6 +418,21 @@ fn hek_v_kepler22_is_windowed_catalog_transit() {
         "Kepler-97 b",
         "Kepler-98 b",
         "Kepler-99 b",
+        "Kepler-101 b",
+        "Kepler-101 c",
+        "Kepler-103 b",
+        "Kepler-104 b",
+        "Kepler-104 c",
+        "Kepler-105 b",
+        "Kepler-105 c",
+        "Kepler-106 b",
+        "Kepler-106 c",
+        "Kepler-106 d",
+        "Kepler-106 e",
+        "Kepler-107 b",
+        "Kepler-107 c",
+        "Kepler-107 d",
+        "Kepler-107 e",
     ] {
         let row = demo
             .per_lc
