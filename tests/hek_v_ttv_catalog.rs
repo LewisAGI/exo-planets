@@ -95,8 +95,8 @@ fn hek_v_demo_is_a_caution_not_a_detection() {
     let lcs = load_lightcurves(Path::new("data/cache")).unwrap();
     let demo = hek_v_photometry_only_caution(&planets, &lcs);
     assert!(
-        demo.n_planet_only_lightcurves >= 8,
-        "Kepler-10 Kepler+TESS, Kepler-1/2/8/9/11/22, K2-3"
+        demo.n_planet_only_lightcurves >= 12,
+        "Kepler-10 Kepler+TESS plus Kepler-1/2/4–9/11/22 and K2 hosts"
     );
     assert!(!demo.per_lc.iter().any(|r| {
         r.planet_name == "Kepler-1625 b"
@@ -167,7 +167,7 @@ fn k2_hosts_are_planets_not_moons() {
 #[test]
 fn cached_lc_count_and_tess_extract_size() {
     let lcs = load_lightcurves(Path::new("data/cache")).unwrap();
-    assert_eq!(n_cached_lightcurves(&lcs), 13);
+    assert_eq!(n_cached_lightcurves(&lcs), 20);
     let tess = lcs
         .get("Kepler-10 b")
         .unwrap()
@@ -214,7 +214,18 @@ fn hek_v_kepler22_is_windowed_catalog_transit() {
         .expect("Kepler-22 b in HEK V demo");
     assert!(k22.windowed);
     assert!(k22.n_in_transit > 0);
-    for name in ["Kepler-2 b", "Kepler-8 b", "Kepler-9 b"] {
+    for name in [
+        "Kepler-2 b",
+        "Kepler-4 b",
+        "Kepler-5 b",
+        "Kepler-6 b",
+        "Kepler-7 b",
+        "Kepler-8 b",
+        "Kepler-9 b",
+        "Kepler-9 c",
+        "Kepler-11 c",
+        "Kepler-11 d",
+    ] {
         let row = demo
             .per_lc
             .iter()

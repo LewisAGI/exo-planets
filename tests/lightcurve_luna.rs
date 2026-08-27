@@ -27,16 +27,23 @@ fn cached_lcs_are_real_pdcsap_kepler_k2_tess() {
     let dir = Path::new("data/cache");
     let lcs = load_lightcurves(dir).unwrap();
     assert!(
-        n_cached_lightcurves(&lcs) >= 13,
-        "expected Kepler-10 (2), Kepler-1/2/8/9/11/22, 1625, 1708, 167, K2-3, K2-18"
+        n_cached_lightcurves(&lcs) >= 20,
+        "expected Kepler-10 (2), Kepler-1/2/4–9/11/22 + siblings, 1625, 1708, 167, K2-3, K2-18"
     );
     for name in [
         "Kepler-10 b",
         "Kepler-1 b",
         "Kepler-2 b",
+        "Kepler-4 b",
+        "Kepler-5 b",
+        "Kepler-6 b",
+        "Kepler-7 b",
         "Kepler-8 b",
         "Kepler-9 b",
+        "Kepler-9 c",
         "Kepler-11 b",
+        "Kepler-11 c",
+        "Kepler-11 d",
         "Kepler-22 b",
         "Kepler-1625 b",
         "Kepler-1708 b",
@@ -167,6 +174,25 @@ fn extra_dip_flag_is_not_a_moon_and_hek_v_fraction_locked() {
         p9.n_in_transit > 0,
         "previous catalog epoch ≈163.27 falls in Q1; not invented"
     );
+
+    for name in [
+        "Kepler-4 b",
+        "Kepler-5 b",
+        "Kepler-6 b",
+        "Kepler-7 b",
+        "Kepler-9 c",
+        "Kepler-11 c",
+        "Kepler-11 d",
+    ] {
+        let p = planets.iter().find(|pl| pl.name == name).unwrap();
+        assert!(p.epoch_bkjd.is_some(), "{name} catalog epoch");
+        let flags = photometry_flags(p, &geometry_for(p), slice(&lcs, name));
+        assert!(flags.lc_available, "{name} LC");
+        assert!(
+            flags.n_in_transit > 0,
+            "{name} Q1 covers a catalog transit; not invented"
+        );
+    }
 }
 
 #[test]
@@ -218,6 +244,11 @@ fn luna_style_flags_are_geometric_not_an_integrator() {
         "high-b planet + tight moon misses the star"
     );
     assert!(!extra_dip_possible(2.5, 0.1, 0.01));
+    assert!(
+        !extra_dip_possible(1.0, 0.0, 0.0),
+        "grazing-equal |b|-a_S/R* = 1+k is a miss (strict <)"
+    );
+    assert!(extra_dip_possible(0.999, 0.0, 0.0));
     let t_syz = syzygy_timescale_hours(0.1, 10.0);
     assert!(t_syz > 0.0);
     assert!((t_syz - 0.1 * 10.0 * 24.0 / (2.0 * std::f64::consts::PI)).abs() < 1e-12);
