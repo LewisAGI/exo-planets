@@ -49,6 +49,9 @@ pub struct CatalogPlanet {
     pub mstar_msun: Option<f64>,
     pub teff_k: Option<f64>,
     pub disposition: Option<String>,
+    pub kepid: Option<u64>,
+    /// KOI `koi_time0bk` (BKJD). Missing on PS-only rows.
+    pub epoch_bkjd: Option<f64>,
 }
 
 impl CatalogPlanet {
@@ -124,6 +127,8 @@ fn planet_from_koi(row: &HashMap<String, String>) -> Option<CatalogPlanet> {
                 Some(d)
             }
         },
+        kepid: parse_f64(get(row, "kepid")).map(|v| v as u64),
+        epoch_bkjd: parse_f64(get(row, "koi_time0bk")),
     })
 }
 
@@ -153,6 +158,8 @@ fn planet_from_ps(row: &HashMap<String, String>) -> Option<CatalogPlanet> {
         mstar_msun: parse_f64(get(row, "st_mass")),
         teff_k: parse_f64(get(row, "st_teff")),
         disposition: Some("PS_DEFAULT".into()),
+        kepid: None,
+        epoch_bkjd: None,
     })
 }
 
@@ -169,6 +176,12 @@ fn merge_ps_onto_koi(koi: &mut CatalogPlanet, ps: &CatalogPlanet) {
     }
     if koi.impact_b.is_none() {
         koi.impact_b = ps.impact_b;
+    }
+    if koi.kepid.is_none() {
+        koi.kepid = ps.kepid;
+    }
+    if koi.epoch_bkjd.is_none() {
+        koi.epoch_bkjd = ps.epoch_bkjd;
     }
     if koi.duration_hr.is_none() {
         koi.duration_hr = ps.duration_hr;
@@ -307,5 +320,7 @@ pub fn fetch_cache(cache_dir: &Path) -> Result<Vec<PathBuf>> {
         f.write_all(body.as_bytes())?;
         written.push(path);
     }
+    let lc_paths = crate::lightcurve::fetch_lightcurves(cache_dir)?;
+    written.extend(lc_paths);
     Ok(written)
 }

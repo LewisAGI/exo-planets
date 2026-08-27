@@ -1,8 +1,9 @@
 # Cache source (NASA Exoplanet Archive TAP)
 
 Pulled 2026-08-27 over public HTTP. **No secrets.** Full MAST / Kepler light-curve
-archives are huge; this repo keeps a small TAP/CSV slice so `cargo test` and
-`exo-planets all` work offline.
+archives are huge; this repo keeps a small TAP/CSV slice **and** three
+extracted Kepler LLC PDCSAP CSVs so `cargo test` and `exo-planets all`
+work offline. Light-curve files: [`lightcurves/SOURCE.md`](lightcurves/SOURCE.md).
 
 Endpoint: `https://exoplanetarchive.ipac.caltech.edu/TAP/sync?query=...&format=csv`
 
@@ -21,6 +22,7 @@ Same queries are hardcoded in `src/ingest.rs`.
 | `nasa_koi_named_systems.csv` | `cumulative` | Kepler-1625 b, Kepler-167 e, Kepler-90 g, Kepler-10 b, Kepler-22 b. **Kepler-1708 b is not in this cumulative pull** (no `kepler_name` match; KIC hunt did not return a 737 d KOI). |
 | `nasa_ps_kepler_transiting_sample.csv` | `ps` | TOP 80 Kepler transiting default rows (masses often empty) |
 | `nasa_ps_named_systems.csv` | `ps` | Named systems including Kepler-1625 b, Kepler-1708 b, Kepler-167 e. Kepler-1708 b `pl_bmasselim=1` (upper limit 4.6 M_J). **Kepler-90 g has no `default_flag=1` PS row** — host parameters come from the KOI cumulative row. |
+| `lightcurves/*.csv` | Kepler LLC FITS extract | Real MAST/Kepler PDCSAP slices (Kepler-10 b, Kepler-1 b, Kepler-1625 b). See [`lightcurves/SOURCE.md`](lightcurves/SOURCE.md). |
 
 Units we rely on (NASA TAP docs, not guessed fills):
 

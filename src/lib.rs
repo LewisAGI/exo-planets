@@ -6,6 +6,7 @@
 pub mod constants;
 pub mod error;
 pub mod features;
+pub mod fits_llc;
 pub mod forecaster;
 pub mod geometry;
 pub mod hek;
@@ -13,7 +14,10 @@ pub mod holdout;
 pub mod ingest;
 pub mod inject;
 pub mod labels;
+pub mod lightcurve;
+pub mod luna;
 pub mod model;
+pub mod photometry;
 pub mod pipeline;
 pub mod tdv;
 pub mod ttv;

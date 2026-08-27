@@ -1,6 +1,7 @@
 use exo_planets::holdout::locked_cards;
 use exo_planets::ingest::load_cache;
 use exo_planets::labels::{is_holdout_host, HoldoutStatus, TrainTarget};
+use exo_planets::lightcurve::load_lightcurves;
 use exo_planets::pipeline::build_dataset;
 use std::path::Path;
 
@@ -31,7 +32,8 @@ fn cache_parses_and_contains_locked_hosts() {
 #[test]
 fn holdout_hosts_never_enter_training_as_moons() {
     let planets = load_cache(Path::new("data/cache")).unwrap();
-    let (train, hold) = build_dataset(&planets).unwrap();
+    let lcs = load_lightcurves(Path::new("data/cache")).unwrap();
+    let (train, hold) = build_dataset(&planets, &lcs).unwrap();
     assert!(train.iter().all(|r| !is_holdout_host(&r.name)));
     assert!(train.iter().all(|r| r.target.is_some()));
     assert!(hold.iter().all(|r| is_holdout_host(&r.name)));

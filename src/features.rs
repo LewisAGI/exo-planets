@@ -1,4 +1,5 @@
-//! Feature row: transit geometry + TTV/TDV + HEK flags + FORECASTER class.
+//! Feature row: transit geometry + TTV/TDV + HEK flags + FORECASTER class
+//! + LUNA-style geometric flags + cached-LC extra-dip flags.
 
 use crate::forecaster::{assign_prior, ForecasterClass, ForecasterPrior};
 use crate::geometry::{compute_geometry, TransitGeometry};
@@ -6,6 +7,8 @@ use crate::hek::HekFlags;
 use crate::ingest::CatalogPlanet;
 use crate::inject::{hek_for_draw, TimingDraw};
 use crate::labels::{ExampleKind, Split, TrainTarget};
+use crate::luna::LunaStyleFlags;
+use crate::photometry::PhotometryFlags;
 use crate::tdv::long_cadence_smear;
 use serde::{Deserialize, Serialize};
 
@@ -28,6 +31,13 @@ pub const FEATURE_NAMES: &[&str] = &[
     "forecaster_jovian",
     "photometry_only",
     "mass_is_extrapolated",
+    "lc_available",
+    "extra_dip_snr",
+    "photometry_only_would_flag",
+    "hek_v_photometry_caution",
+    "overlapping_disc_possible",
+    "syzygy_in_transit_possible",
+    "extra_dip_geometric",
 ];
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -41,6 +51,8 @@ pub struct FeatureRow {
     pub timing: TimingOut,
     pub hek: HekFlags,
     pub forecaster: ForecasterPrior,
+    pub photometry: PhotometryFlags,
+    pub luna: LunaStyleFlags,
     pub vector: Vec<f64>,
 }
 
@@ -121,8 +133,10 @@ pub fn build_row(
     prior: &ForecasterPrior,
     draw: &TimingDraw,
     split: Split,
-    photometry_only: bool,
+    photo: &PhotometryFlags,
+    luna: &LunaStyleFlags,
 ) -> FeatureRow {
+    let photometry_only = photo.photometry_only_would_flag;
     let hek = hek_for_draw(planet, draw, photometry_only);
     let (ft, fnp, fj) = one_hot_class(prior.class);
     let d_hill = draw.hypothesis.as_ref().map(|h| h.d_hill).unwrap_or(0.0);
@@ -165,6 +179,29 @@ pub fn build_row(
         } else {
             0.0
         },
+        if photo.lc_available { 1.0 } else { 0.0 },
+        photo.extra_dip_snr,
+        if photo.photometry_only_would_flag {
+            1.0
+        } else {
+            0.0
+        },
+        if photo.hek_v_caution { 1.0 } else { 0.0 },
+        if luna.overlapping_disc_possible {
+            1.0
+        } else {
+            0.0
+        },
+        if luna.syzygy_in_transit_possible {
+            1.0
+        } else {
+            0.0
+        },
+        if luna.extra_dip_on_star_possible {
+            1.0
+        } else {
+            0.0
+        },
     ];
     FeatureRow {
         id: match &draw.hypothesis {
@@ -202,6 +239,8 @@ pub fn build_row(
         },
         hek,
         forecaster: prior.clone(),
+        photometry: photo.clone(),
+        luna: luna.clone(),
         vector,
     }
 }

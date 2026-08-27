@@ -6,7 +6,10 @@ use crate::holdout::{attach_catalog_and_model, locked_cards, HoldoutCard};
 use crate::ingest::{fetch_cache, load_cache, CatalogPlanet};
 use crate::inject::{default_injections, draw_injected, draw_planet_only};
 use crate::labels::Split;
+use crate::lightcurve::{load_lightcurves, LightCurveIndex};
+use crate::luna::luna_style_flags;
 use crate::model::{evaluate, train, EvalReport, TrainedModel};
+use crate::photometry::photometry_flags;
 use rand::SeedableRng;
 use rand_chacha::ChaCha8Rng;
 use serde::{Deserialize, Serialize};
@@ -25,13 +28,17 @@ pub struct PipelineReport {
     pub n_train_rows: usize,
     pub n_injected_rows: usize,
     pub n_planet_only_rows: usize,
+    pub n_cached_lightcurves: usize,
     pub eval_held_fraction: EvalReport,
     pub eval_train: EvalReport,
     pub holdouts: Vec<HoldoutCard>,
     pub model: TrainedModel,
 }
 
-pub fn build_dataset(planets: &[CatalogPlanet]) -> Result<(Vec<FeatureRow>, Vec<FeatureRow>)> {
+pub fn build_dataset(
+    planets: &[CatalogPlanet],
+    lcs: &LightCurveIndex,
+) -> Result<(Vec<FeatureRow>, Vec<FeatureRow>)> {
     let mut rng = ChaCha8Rng::seed_from_u64(RNG_SEED);
     let mut train_rows = Vec::new();
     let mut holdout_rows = Vec::new();
@@ -41,13 +48,15 @@ pub fn build_dataset(planets: &[CatalogPlanet]) -> Result<(Vec<FeatureRow>, Vec<
         }
         let geom = geometry_for(planet);
         let prior = prior_for(planet);
+        let photo = photometry_flags(planet, &geom, lcs.get(&planet.name));
         let split = if planet.is_holdout_host() {
             Split::Holdout
         } else {
             Split::Train
         };
         let null = draw_planet_only(&mut rng, planet, &geom);
-        let row = build_row(planet, &geom, &prior, &null, split, false);
+        let luna0 = luna_style_flags(planet, &geom, &prior, None, resolved_a_au(planet, &geom));
+        let row = build_row(planet, &geom, &prior, &null, split, &photo, &luna0);
         if split == Split::Holdout {
             holdout_rows.push(row);
             continue;
@@ -56,7 +65,22 @@ pub fn build_dataset(planets: &[CatalogPlanet]) -> Result<(Vec<FeatureRow>, Vec<
         if let Some(a_au) = resolved_a_au(planet, &geom) {
             for hypo in default_injections() {
                 if let Some(draw) = draw_injected(&mut rng, planet, &geom, &prior, hypo, a_au) {
-                    train_rows.push(build_row(planet, &geom, &prior, &draw, Split::Train, false));
+                    let luna = luna_style_flags(
+                        planet,
+                        &geom,
+                        &prior,
+                        draw.hypothesis.as_ref(),
+                        Some(a_au),
+                    );
+                    train_rows.push(build_row(
+                        planet,
+                        &geom,
+                        &prior,
+                        &draw,
+                        Split::Train,
+                        &photo,
+                        &luna,
+                    ));
                 }
             }
         }
@@ -97,7 +121,8 @@ fn stratified_holdout<'a>(
 pub fn run_train_score(cache_dir: &Path, out_dir: &Path) -> Result<PipelineReport> {
     std::fs::create_dir_all(out_dir)?;
     let planets = load_cache(cache_dir)?;
-    let (train_rows, holdout_rows) = build_dataset(&planets)?;
+    let lcs = load_lightcurves(cache_dir)?;
+    let (train_rows, holdout_rows) = build_dataset(&planets, &lcs)?;
     let n_injected = train_rows
         .iter()
         .filter(|r| r.kind == crate::labels::ExampleKind::Injected)
@@ -125,6 +150,7 @@ pub fn run_train_score(cache_dir: &Path, out_dir: &Path) -> Result<PipelineRepor
         n_train_rows: train_rows.len(),
         n_injected_rows: n_injected,
         n_planet_only_rows: n_po,
+        n_cached_lightcurves: lcs.len(),
         eval_held_fraction: eval_held,
         eval_train: eval_tr,
         holdouts: cards,
@@ -151,6 +177,10 @@ fn write_json<T: Serialize>(path: &Path, value: &T) -> Result<()> {
 
 pub fn print_report(report: &PipelineReport) {
     println!("catalog planets: {}", report.n_catalog_planets);
+    println!(
+        "cached MAST/Kepler light curves: {}",
+        report.n_cached_lightcurves
+    );
     println!(
         "train planets / holdout hosts: {} / {}",
         report.n_train_planets, report.n_holdout_planets

@@ -31,6 +31,10 @@ pub struct HoldoutCard {
     pub forecaster_class: Option<String>,
     pub forecaster_extrapolated: Option<bool>,
     pub photometry_only_caution: bool,
+    pub lc_available: bool,
+    pub extra_dip_snr: Option<f64>,
+    pub photometry_only_would_flag: bool,
+    pub overlapping_disc_flag: bool,
     pub do_not: String,
 }
 
@@ -53,6 +57,10 @@ pub fn locked_cards() -> Vec<HoldoutCard> {
             forecaster_class: None,
             forecaster_extrapolated: None,
             photometry_only_caution: true,
+            lc_available: false,
+            extra_dip_snr: None,
+            photometry_only_would_flag: false,
+            overlapping_disc_flag: false,
             do_not: "Do not train as a confirmed moon. Do not invent a TTV. Do not confirm.".into(),
         },
         HoldoutCard {
@@ -72,6 +80,10 @@ pub fn locked_cards() -> Vec<HoldoutCard> {
             forecaster_class: None,
             forecaster_extrapolated: None,
             photometry_only_caution: false,
+            lc_available: false,
+            extra_dip_snr: None,
+            photometry_only_would_flag: false,
+            overlapping_disc_flag: false,
             do_not: "Do not train as a confirmed moon. Predicted TTV range is not a measurement."
                 .into(),
         },
@@ -94,6 +106,10 @@ pub fn locked_cards() -> Vec<HoldoutCard> {
             forecaster_class: None,
             forecaster_extrapolated: None,
             photometry_only_caution: true,
+            lc_available: false,
+            extra_dip_snr: None,
+            photometry_only_would_flag: false,
+            overlapping_disc_flag: false,
             do_not: "Status is FALSE POSITIVE regardless of any model score.".into(),
         },
         HoldoutCard {
@@ -115,6 +131,10 @@ pub fn locked_cards() -> Vec<HoldoutCard> {
             forecaster_class: None,
             forecaster_extrapolated: None,
             photometry_only_caution: false,
+            lc_available: false,
+            extra_dip_snr: None,
+            photometry_only_would_flag: false,
+            overlapping_disc_flag: false,
             do_not: "Do not promote a moon from a 7–17 min residual.".into(),
         },
     ]
@@ -149,6 +169,13 @@ pub fn attach_catalog_and_model(
             card.geometry_depth_ppm = Some(row.geometry.depth_ppm);
             card.forecaster_class = Some(row.forecaster.class.as_str().into());
             card.forecaster_extrapolated = Some(row.forecaster.from_radius_extrapolation);
+            card.lc_available = row.photometry.lc_available;
+            card.extra_dip_snr = Some(row.photometry.extra_dip_snr);
+            card.photometry_only_would_flag = row.photometry.photometry_only_would_flag;
+            card.overlapping_disc_flag = row.luna.overlapping_disc_possible;
+            if row.photometry.photometry_only_would_flag {
+                card.photometry_only_caution = true;
+            }
             let p_null = model.predict_proba(&row.vector);
             match card.object_id.as_str() {
                 "Kepler-1708 b-i" => {
@@ -178,7 +205,7 @@ pub fn attach_catalog_and_model(
                 "Kepler-1625b-i" => {
                     card.model_p_injected_like = Some(p_null);
                     card.model_input = Some(
-                        "catalog geometry + synthetic-null timing. No published TTV was invented. Photometry-only caution applies."
+                        "catalog geometry + synthetic-null timing + cached Q8 Kepler LC flags (no catalog transit in that window). No TTV invented. Moon stays CANDIDATE. Photometry-only caution applies."
                             .into(),
                     );
                 }

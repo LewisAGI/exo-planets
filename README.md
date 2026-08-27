@@ -1,9 +1,11 @@
 # exo-planets
 
 Rust crate for **Kipping transit / TTV / TDV signatures** on a **public NASA
-Exoplanet Archive TAP slice**, plus a small **linfa** logistic model.
+Exoplanet Archive TAP slice**, a **cached MAST/Kepler light-curve extract**,
+LUNA-**style flags** (not a LUNA port), plus a small **linfa** logistic model.
 
-This is **not** a moon-discovery paper, not LUNA, and not a confirmation engine.
+This is **not** a moon-discovery paper, not a LUNA integrator, and not a
+confirmation engine.
 
 Science lock (2026-08-27, opened papers only). Cool Worlds videos are not
 results. HEK II–V are **all null**. Named objects stay
@@ -11,19 +13,23 @@ results. HEK II–V are **all null**. Named objects stay
 
 ## What this is
 
-1. **Ingest** of a cached NASA TAP/CSV sample (KOI `cumulative` + PS `ps`).
+1. **Ingest** of a cached NASA TAP/CSV sample (KOI `cumulative` + PS `ps`)
+   and three real Kepler long-cadence PDCSAP extracts (Kepler-10 b, Kepler-1 b,
+   Kepler-1625 b). See [`data/cache/lightcurves/SOURCE.md`](data/cache/lightcurves/SOURCE.md).
 2. **Feature layer**: transit geometry (Kipping 2009b / Seager & Mallén-Ornelas),
    circular TTV (Kipping 2009a), TDV-V / first-order TDV-TIP, HEK-style
    dynamical cuts and a **timing Bayes-factor proxy**, FORECASTER mass-prior
    *class* (Chen & Kipping 2017) labelled **extrapolation** when discretized
-   from radius.
+   from radius, **LUNA-style geometric flags** (overlapping disc / syzygy /
+   extra-dip *possible*), and extra-dip SNR from the cached LCs.
 3. **Trainable model in Rust** (`linfa-logistic`). Train/eval on confirmed KOIs
    as planet-only + **injected** TTV/TDV moons. The four locked systems are
    **holdout score cards only**.
 
 ## What this is not
 
-- Not LUNA photodynamics (no 3-body overlapping-disc integrator).
+- Not LUNA. There is **no** 3-body sky integrator and **no** overlapping-disc
+  photometry. Flags only. Do not cite this as a LUNA port.
 - Not a HEK Bayes factor. The “BF” number is a timing-RMS χ² / BIC **proxy**.
 - Not official FORECASTER posterior draws. Radius bins are a discretization.
 - Not a published TTV catalog. Planet-only timing is **synthetic white noise**.
@@ -73,9 +79,11 @@ Locked statuses: [`data/labels/holdout_scorecards.json`](data/labels/holdout_sco
 | TDV-TIP | first-order \|dT/db\| (a_W/R_*)/√2 | Additive prograde, subtractive retrograde. **Not LUNA.** |
 | D_max | 0.4895 prograde, 0.9309 retrograde | Domingos 2006 |
 | HEK I 4σ | z = δTTV / σ_timing | Proxy threshold |
-| HEK V | photometry-only caution | Would have false-claimed ~1/4 of KOIs |
+| HEK V | photometry-only extra-dip flag | Would have false-claimed ~1/4 of KOIs. A fire is a **caution**, not a moon. |
 | HEK VI | η < 0.38 (95%), 284 KOIs | A **dearth**, not a detection. BF~2 is a hint. |
 | FORECASTER | Terran / Neptunian / Jovian / stellar; 2.0^{+0.7}_{-0.6} M⊕ | Prior class only |
+| LUNA-style flags | overlapping disc / syzygy / extra-dip-on-star **possible** | Geometry only. Not LUNA. |
+| LC extra-dip SNR | box residual on cached Kepler PDCSAP | Real photometry; not a detection. |
 
 The lock text writes `P_SB = P_B / √(D³/3)`. That is the **reciprocal** of the
 Kepler+Hill period. This crate evaluates `P_S = P_B √(D³/3)` and the cut
@@ -105,9 +113,11 @@ They are never trained as confirmed moons. The classifier’s
   moon-nulls. HEK II–V already published those nulls; we do not re-litigate
   them as detections.
 - Injected moons are synthetic and labelled `injected`.
-- No MAST light curves, no Hubble or JWST time series, no Columbia 1625
-  photometry products are ingested — only TAP planet/KOI parameters plus
-  the locked published timing *ranges* on the score cards.
+- Cached Kepler LLC extracts exist for Kepler-10 b, Kepler-1 b, and
+  Kepler-1625 b only. No K2, no TESS, no Hubble, no JWST, no Columbia 1625
+  products. Kepler-1625 Q8 does **not** cover a catalog transit; none was
+  invented. The moon stays **CANDIDATE**.
+- LUNA-style items are **flags**, not a photodynamical integrator.
 - Kepler-90 g has no `default_flag=1` PS row in the 2026-08-27 TAP pull;
   geometry comes from KOI cumulative.
 - Kepler-1708 b is missing from the KOI cumulative pull; it comes from PS.
