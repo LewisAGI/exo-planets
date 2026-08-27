@@ -1,11 +1,13 @@
 //! Fetch → features → train → holdout score cards.
 
+use crate::columbia1625::{columbia_1625_skip, Columbia1625Skip};
 use crate::error::Result;
 use crate::features::{build_row, geometry_for, prior_for, resolved_a_au, FeatureRow};
 use crate::hek_v_demo::{hek_v_photometry_only_caution, HekVCautionDemo};
 use crate::holdout::{attach_catalog_and_model, locked_cards, HoldoutCard};
 use crate::ingest::{fetch_cache, load_cache, CatalogPlanet};
 use crate::inject::{default_injections, draw_injected, draw_planet_only};
+use crate::jwst_search::{load_jwst_go6491, JwstGo6491Search};
 use crate::labels::Split;
 use crate::lightcurve::{load_lightcurves, n_cached_lightcurves, LightCurveIndex};
 use crate::luna::luna_style_flags;
@@ -33,6 +35,8 @@ pub struct PipelineReport {
     pub n_cached_lightcurves: usize,
     pub n_published_ttv_matches: usize,
     pub hek_v_demo: HekVCautionDemo,
+    pub jwst_go6491: Option<JwstGo6491Search>,
+    pub columbia_1625: Columbia1625Skip,
     pub eval_held_fraction: EvalReport,
     pub eval_train: EvalReport,
     pub holdouts: Vec<HoldoutCard>,
@@ -152,7 +156,22 @@ pub fn run_train_score(cache_dir: &Path, out_dir: &Path) -> Result<PipelineRepor
     let mut eval_tr = evaluate(&model, &fit_owned);
     eval_tr.n_train = fit_owned.len();
 
-    let cards = attach_catalog_and_model(locked_cards(), &planets, &holdout_rows, &model);
+    let mut cards = attach_catalog_and_model(locked_cards(), &planets, &holdout_rows, &model);
+    let jwst_go6491 = load_jwst_go6491(cache_dir)?;
+    if let Some(jwst) = &jwst_go6491 {
+        debug_assert!(jwst.is_search());
+        debug_assert!(!jwst.photometry_cached);
+        if let Some(c) = cards
+            .iter_mut()
+            .find(|c| c.object_id == "JWST Kepler-167e (GO 6491)")
+        {
+            c.jwst_doi = Some(jwst.doi.clone());
+            c.jwst_photometry_cached = jwst.photometry_cached;
+        }
+    }
+    let columbia_1625 = columbia_1625_skip();
+    debug_assert!(!columbia_1625.cached);
+    debug_assert_eq!(columbia_1625.status, "CANDIDATE");
 
     let report = PipelineReport {
         n_catalog_planets: planets.len(),
@@ -164,6 +183,8 @@ pub fn run_train_score(cache_dir: &Path, out_dir: &Path) -> Result<PipelineRepor
         n_cached_lightcurves: n_cached_lightcurves(&lcs),
         n_published_ttv_matches: n_ttv,
         hek_v_demo,
+        jwst_go6491,
+        columbia_1625,
         eval_held_fraction: eval_held,
         eval_train: eval_tr,
         holdouts: cards,
@@ -219,6 +240,16 @@ pub fn print_report(report: &PipelineReport) {
         report.eval_held_fraction.planet_only_recall,
         report.eval_held_fraction.mean_p_injected_on_injected,
         report.eval_held_fraction.mean_p_injected_on_planet_only
+    );
+    if let Some(j) = &report.jwst_go6491 {
+        println!(
+            "JWST GO 6491 fixture: status={} doi={} photometry_cached={} — {}",
+            j.status, j.doi, j.photometry_cached, j.note
+        );
+    }
+    println!(
+        "Columbia 1625: cached={} status={} — {}",
+        report.columbia_1625.cached, report.columbia_1625.status, report.columbia_1625.note
     );
     println!("holdout score cards (locked statuses):");
     for c in &report.holdouts {

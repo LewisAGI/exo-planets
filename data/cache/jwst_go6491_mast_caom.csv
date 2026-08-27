@@ -1,0 +1,2 @@
+proposal_id,obsid,obs_id,target_name,instrument_name,filters,calib_level,intentType,t_min_mjd,t_max_mjd,t_exptime_s,s_ra,s_dec,dataURL,doi
+6491,349841413,jw06491-o001_t001_nirspec_clear-prism-s1600a1-sub512,Kepler-167,NIRSPEC/SLIT,CLEAR;PRISM,3,science,60607.62661806713,60610.16519637732,30352.481,292.65857518984939,38.345650581657665,mast:JWST/product/jw06491-o001_t001_nirspec_clear-prism-s1600a1-sub512_x1dints.fits,10.17909/e50n-4y96

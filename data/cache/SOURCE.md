@@ -23,7 +23,9 @@ Same queries are hardcoded in `src/ingest.rs`. Holczer refresh is CDS HTTP
 | `nasa_koi_named_systems.csv` | `cumulative` | Kepler-1625 b, Kepler-167 e, Kepler-90 g, Kepler-10 b, Kepler-22 b. **Kepler-1708 b is not in this cumulative pull** (no `kepler_name` match; KIC hunt did not return a 737 d KOI). |
 | `nasa_ps_kepler_transiting_sample.csv` | `ps` | TOP 80 Kepler transiting default rows (masses often empty) |
 | `nasa_ps_named_systems.csv` | `ps` | Named systems including Kepler-1625 b, Kepler-1708 b, Kepler-167 e. Kepler-1708 b `pl_bmasselim=1` (upper limit 4.6 M_J). **Kepler-90 g has no `default_flag=1` PS row** — host parameters come from the KOI cumulative row. |
-| `nasa_ps_k2_hosts.csv` | `ps` | K2-3 b and K2-3 c default rows (confirmed planets for the K2 C1 LC). No `pl_tranmid` / `pl_trandur` in this slice — extra-dip on K2-3 b is unwindowed. |
+| `nasa_ps_k2_hosts.csv` | `ps` | K2-3 b/c and K2-18 b/c default rows (confirmed planets for the K2 C1 LCs). No `pl_tranmid` in this slice — extra-dip is unwindowed. K2-18 c is RV-only (`tran_flag=0`). |
+| `jwst_go6491_search.json` | MAST DOI 10.17909/e50n-4y96 | GO 6491 **SEARCH** fixture. Metadata only. NIRSpec time series **not** cached. Residual 7–17 min is lock text, not a moon. |
+| `jwst_go6491_mast_caom.csv` | MAST CAOM | One calib_level=3 science row (Kepler-167, NIRSPEC/SLIT, CLEAR;PRISM). Not a light curve. |
 | `holczer2016_table4_oc_scatter.csv` | VizieR `J/ApJS/225/9` table4 | Holczer+2016 O−C **scatter** (1.4826×MAD, minutes) and median TTV uncertainty. **Planet-only timing**, often planet–planet. Not moons. NASA TAP has `ttv_flag` on PS, not a TTV time series. Holdout KOIs 351.02 / 490.02 / 5084.01 are absent. Kepler-1708 is 2021 — not in this 2016 table. Source: `https://cdsarc.cds.unistra.fr/ftp/J/ApJS/225/9/table4.dat` |
 | `lightcurves/*.csv` | Kepler / K2 LLC + TESS SPOC extract | Real MAST PDCSAP slices. See [`lightcurves/SOURCE.md`](lightcurves/SOURCE.md). |
 

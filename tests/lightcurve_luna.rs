@@ -23,8 +23,8 @@ fn cached_lcs_are_real_pdcsap_kepler_k2_tess() {
     let dir = Path::new("data/cache");
     let lcs = load_lightcurves(dir).unwrap();
     assert!(
-        n_cached_lightcurves(&lcs) >= 8,
-        "expected Kepler-10 (2), Kepler-1, Kepler-22, 1625, 1708, 167, K2-3"
+        n_cached_lightcurves(&lcs) >= 9,
+        "expected Kepler-10 (2), Kepler-1, Kepler-22, 1625, 1708, 167, K2-3, K2-18"
     );
     for name in [
         "Kepler-10 b",
@@ -34,6 +34,7 @@ fn cached_lcs_are_real_pdcsap_kepler_k2_tess() {
         "Kepler-1708 b",
         "Kepler-167 e",
         "K2-3 b",
+        "K2-18 b",
     ] {
         let curves = lcs.get(name).unwrap_or_else(|| panic!("missing {name}"));
         assert!(curves.iter().any(|lc| lc.len() > 500), "{name} too short");
@@ -141,6 +142,10 @@ fn luna_style_flags_are_geometric_not_an_integrator() {
     assert!(on.moon_k > 0.0);
     assert!(on.method.contains("Not a LUNA integrator"));
     assert!(moon_radius_earth_extrap(1.0) > 0.5);
+
+    let no_a = luna_style_flags(k10, &geom, &prior, Some(&hypo), None);
+    assert!(!no_a.overlapping_disc_possible);
+    assert!(no_a.method.contains("no moon hypothesis") || no_a.moon_k == 0.0);
 }
 
 #[test]

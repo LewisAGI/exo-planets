@@ -15,10 +15,11 @@ results. HEK II–V are **all null**. Named objects stay
 ## What this is
 
 1. **Ingest** of a cached NASA TAP/CSV sample (KOI `cumulative` + PS `ps`,
-   including K2-3 hosts), Holczer et al. 2016 Table 4 O−C scatter (VizieR
-   `J/ApJS/225/9`; **planet-only timing, not moons**), and real PDCSAP
-   extracts: Kepler-10 b (Kepler Q1 + TESS S14), Kepler-1 b, Kepler-22 b Q1,
-   K2-3 b (K2 C1), plus holdout-host Q1/Q8 windows for Kepler-1625 b,
+   including K2-3 / K2-18 hosts), Holczer et al. 2016 Table 4 O−C scatter
+   (VizieR `J/ApJS/225/9`; **planet-only timing, not moons**), JWST GO 6491
+   MAST/DOI **metadata** (SEARCH; no NIRSpec LC), and real PDCSAP extracts:
+   Kepler-10 b (Kepler Q1 + TESS S14), Kepler-1 b, Kepler-22 b Q1, K2-3 b
+   C1, K2-18 b C1, plus holdout-host Q1/Q8 windows for Kepler-1625 b,
    Kepler-1708 b, and Kepler-167 e. See
    [`data/cache/lightcurves/SOURCE.md`](data/cache/lightcurves/SOURCE.md).
 2. **Feature layer**: transit geometry (Kipping 2009b / Seager & Mallén-Ornelas),
@@ -126,8 +127,11 @@ They are never trained as confirmed moons. The classifier’s
 - Injected moons are synthetic and labelled `injected`.
 - Cached LCs: Kepler-10 b (Kepler Q1 + TESS S14 SPOC), Kepler-1 b Q1,
   Kepler-22 b Q1 (catalog transit in-window, not invented), K2-3 b C1,
-  Kepler-1625 b Q8, Kepler-1708 b Q1, Kepler-167 e Q1. No Hubble, no
-  JWST, no Columbia 1625 products. No TESSCut / FFI photometry was invented.
+  K2-18 b C1, Kepler-1625 b Q8, Kepler-1708 b Q1, Kepler-167 e Q1.
+  JWST GO 6491 is **MAST/DOI metadata only** (SEARCH; no NIRSpec time
+  series cached). Columbia Academic Commons 1625 `/download` was **404**
+  behind Anubis; no Hubble product cached. No TESSCut / FFI photometry
+  was invented.
   Kepler-1625 Q8, Kepler-1708 Q1, and Kepler-167 e Q1 do **not** cover a
   catalog transit; none was invented. Statuses stay **CANDIDATE / SEARCH**.
 - Holczer+2016 is Table 4 statistics only (not the 295k-row table3 times).

@@ -25,7 +25,7 @@ pub const Q_PS_KEPLER_SAMPLE: &str = "SELECT TOP 80 pl_name,hostname,pl_letter,s
 pub const Q_PS_NAMED: &str = "SELECT pl_name,hostname,pl_letter,sy_pnum,discoverymethod,disc_year,disc_facility,pl_orbper,pl_orbsmax,pl_rade,pl_radj,pl_bmasse,pl_bmassj,pl_bmasselim,pl_orbeccen,pl_orbincl,pl_imppar,pl_trandep,pl_trandur,st_teff,st_rad,st_mass,default_flag,tran_flag FROM ps WHERE default_flag=1 AND pl_name IN ('Kepler-1625 b','Kepler-1708 b','Kepler-90 g','Kepler-167 e','Kepler-22 b','Kepler-10 b','Kepler-11 b','Kepler-16 b','Kepler-51 d','Kepler-79 d','Kepler-9 b','Kepler-9 c')";
 
 /// Confirmed K2 hosts used only as LC-backed **planets** (not moons).
-pub const Q_PS_K2_HOSTS: &str = "SELECT pl_name,hostname,pl_letter,sy_pnum,discoverymethod,disc_year,disc_facility,pl_orbper,pl_orbsmax,pl_rade,pl_radj,pl_bmasse,pl_bmassj,pl_bmasselim,pl_orbeccen,pl_orbincl,pl_imppar,pl_trandep,pl_trandur,st_teff,st_rad,st_mass,default_flag,tran_flag FROM ps WHERE default_flag=1 AND pl_name IN ('K2-3 b','K2-3 c')";
+pub const Q_PS_K2_HOSTS: &str = "SELECT pl_name,hostname,pl_letter,sy_pnum,discoverymethod,disc_year,disc_facility,pl_orbper,pl_orbsmax,pl_rade,pl_radj,pl_bmasse,pl_bmassj,pl_bmasselim,pl_orbeccen,pl_orbincl,pl_imppar,pl_trandep,pl_trandur,st_teff,st_rad,st_mass,default_flag,tran_flag FROM ps WHERE default_flag=1 AND pl_name IN ('K2-3 b','K2-3 c','K2-18 b','K2-18 c')";
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]
@@ -335,6 +335,12 @@ pub fn fetch_cache(cache_dir: &Path) -> Result<Vec<PathBuf>> {
         Err(e) => {
             // CDS TAP is flaky (503). Keep the in-repo Holczer extract.
             eprintln!("Holczer table4 refresh skipped (cache kept): {e}");
+        }
+    }
+    match crate::jwst_search::fetch_jwst_go6491(cache_dir) {
+        Ok(paths) => written.extend(paths),
+        Err(e) => {
+            eprintln!("JWST GO 6491 metadata refresh skipped (cache kept): {e}");
         }
     }
     Ok(written)

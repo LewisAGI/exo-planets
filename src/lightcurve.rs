@@ -131,6 +131,18 @@ pub fn cached_specs() -> Vec<LightCurveSpec> {
             time_offset_days: 0.0,
             extract_mid_points: None,
         },
+        LightCurveSpec {
+            name: "K2-18 b",
+            target_id: 201_912_552,
+            id_kind: "EPIC",
+            mission: "K2",
+            cadence: "long",
+            cache_csv: "lightcurves/k2_18_epic201912552_c01_llc.csv",
+            source_url: "https://archive.stsci.edu/pub/k2/lightcurves/c1/201900000/12000/ktwo201912552-c01_llc.fits",
+            note: "K2 Campaign 1 LLC. Confirmed planet. Cached PS row has no transit epoch; extra-dip is unwindowed. Not a moon.",
+            time_offset_days: 0.0,
+            extract_mid_points: None,
+        },
     ]
 }
 

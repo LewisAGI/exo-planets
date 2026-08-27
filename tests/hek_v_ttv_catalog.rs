@@ -135,6 +135,7 @@ fn tess_btjd_to_bkjd_offset_is_2167() {
 fn k2_hosts_are_planets_not_moons() {
     let planets = load_cache(Path::new("data/cache")).unwrap();
     assert!(planets.iter().any(|p| p.name == "K2-3 b"));
+    assert!(planets.iter().any(|p| p.name == "K2-18 b"));
     assert!(planets
         .iter()
         .all(|p| !p.name.to_lowercase().contains("moon")));
@@ -143,7 +144,7 @@ fn k2_hosts_are_planets_not_moons() {
 #[test]
 fn cached_lc_count_and_tess_extract_size() {
     let lcs = load_lightcurves(Path::new("data/cache")).unwrap();
-    assert_eq!(n_cached_lightcurves(&lcs), 8);
+    assert_eq!(n_cached_lightcurves(&lcs), 9);
     let tess = lcs
         .get("Kepler-10 b")
         .unwrap()

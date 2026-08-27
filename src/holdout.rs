@@ -35,6 +35,10 @@ pub struct HoldoutCard {
     pub extra_dip_snr: Option<f64>,
     pub photometry_only_would_flag: bool,
     pub overlapping_disc_flag: bool,
+    pub jwst_doi: Option<String>,
+    pub jwst_photometry_cached: bool,
+    pub columbia_product_cached: bool,
+    pub published_product_note: Option<String>,
     pub do_not: String,
 }
 
@@ -61,6 +65,13 @@ pub fn locked_cards() -> Vec<HoldoutCard> {
             extra_dip_snr: None,
             photometry_only_would_flag: false,
             overlapping_disc_flag: false,
+            jwst_doi: None,
+            jwst_photometry_cached: false,
+            columbia_product_cached: false,
+            published_product_note: Some(
+                "Columbia Academic Commons DOI 10.7916/D8795NHS: Anubis bot-wall; /download 404. No product cached. Hubble-dependent, unconfirmed. Stays CANDIDATE."
+                    .into(),
+            ),
             do_not: "Do not train as a confirmed moon. Do not invent a TTV. Do not confirm.".into(),
         },
         HoldoutCard {
@@ -84,6 +95,10 @@ pub fn locked_cards() -> Vec<HoldoutCard> {
             extra_dip_snr: None,
             photometry_only_would_flag: false,
             overlapping_disc_flag: false,
+            jwst_doi: None,
+            jwst_photometry_cached: false,
+            columbia_product_cached: false,
+            published_product_note: None,
             do_not: "Do not train as a confirmed moon. Predicted TTV range is not a measurement."
                 .into(),
         },
@@ -110,6 +125,10 @@ pub fn locked_cards() -> Vec<HoldoutCard> {
             extra_dip_snr: None,
             photometry_only_would_flag: false,
             overlapping_disc_flag: false,
+            jwst_doi: None,
+            jwst_photometry_cached: false,
+            columbia_product_cached: false,
+            published_product_note: None,
             do_not: "Status is FALSE POSITIVE regardless of any model score.".into(),
         },
         HoldoutCard {
@@ -135,6 +154,13 @@ pub fn locked_cards() -> Vec<HoldoutCard> {
             extra_dip_snr: None,
             photometry_only_would_flag: false,
             overlapping_disc_flag: false,
+            jwst_doi: Some("10.17909/e50n-4y96".into()),
+            jwst_photometry_cached: false,
+            columbia_product_cached: false,
+            published_product_note: Some(
+                "MAST/DOI metadata only (GO 6491 NIRSpec CAOM). Time series not cached. Residual 7–17 min is lock text, not a moon."
+                    .into(),
+            ),
             do_not: "Do not promote a moon from a 7–17 min residual.".into(),
         },
     ]

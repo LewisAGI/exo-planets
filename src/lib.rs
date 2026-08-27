@@ -3,6 +3,7 @@
 //! Science lock (2026-08-27): only opened Kipping / HEK / FORECASTER papers.
 //! Cool Worlds videos are not results. Named moons stay candidate / FP / search.
 
+pub mod columbia1625;
 pub mod constants;
 pub mod error;
 pub mod features;
@@ -14,6 +15,7 @@ pub mod hek_v_demo;
 pub mod holdout;
 pub mod ingest;
 pub mod inject;
+pub mod jwst_search;
 pub mod labels;
 pub mod lightcurve;
 pub mod luna;

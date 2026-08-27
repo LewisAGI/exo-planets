@@ -1,0 +1,26 @@
+{
+  "object_id": "JWST Kepler-167e (GO 6491)",
+  "host_planet": "Kepler-167 e",
+  "status": "SEARCH",
+  "proposal_id": "6491",
+  "doi": "10.17909/e50n-4y96",
+  "doi_title": "Data from A JWST Transit of a Jupiter Analog",
+  "doi_creator": "Cassese, Ben",
+  "target_name": "Kepler-167",
+  "instrument": "NIRSPEC/SLIT",
+  "filters": "CLEAR;PRISM",
+  "obs_id_cal3": "jw06491-o001_t001_nirspec_clear-prism-s1600a1-sub512",
+  "t_min_mjd": 60607.62661806713,
+  "t_max_mjd": 60610.16519637732,
+  "t_exptime_s": 30352.481,
+  "n_mast_caom_products": 25,
+  "mast_product_uri": "mast:JWST/product/jw06491-o001_t001_nirspec_clear-prism-s1600a1-sub512_x1dints.fits",
+  "photometry_cached": false,
+  "locked_residual_note": "Residual timing 7–17 min after linear ephemeris is lock text, not a measurement extracted from JWST FITS. Do not promote a moon.",
+  "note": "Public MAST CAOM / DOI metadata only. The NIRSpec time series was not downloaded. GO 6491 is a SEARCH, not a detection.",
+  "sources": [
+    "https://archive.stsci.edu/doi/resolve/resolve.html?doi=10.17909/e50n-4y96",
+    "https://mast.stsci.edu/api/v0/invoke (Mast.Caom.Filtered proposal_id=6491 calib_level=3)",
+    "https://www.stsci.edu/jwst-program-info/download/jwst/pdf/6491/"
+  ]
+}
