@@ -1,0 +1,29 @@
+{
+  "lock": "2026-08-27 Shisui note. Statuses are locked. Do not upgrade.",
+  "objects": [
+    {
+      "id": "Kepler-1625b-i",
+      "host": "Kepler-1625 b",
+      "status": "CANDIDATE",
+      "note": "Hubble dip model-dependent; authors call unconfirmed."
+    },
+    {
+      "id": "Kepler-1708 b-i",
+      "host": "Kepler-1708 b",
+      "status": "CANDIDATE",
+      "note": "Planet validated; moon not. Only two Kepler transits. Predicted TTV 1.2–77 min (95%)."
+    },
+    {
+      "id": "Kepler-90g moon",
+      "host": "Kepler-90 g",
+      "status": "FALSE POSITIVE",
+      "note": "SPSD / pixel-centroid."
+    },
+    {
+      "id": "JWST Kepler-167e (GO 6491)",
+      "host": "Kepler-167 e",
+      "status": "SEARCH",
+      "note": "Not a detection. Residual timing 7–17 min after linear ephemeris. Do not promote a moon."
+    }
+  ]
+}
